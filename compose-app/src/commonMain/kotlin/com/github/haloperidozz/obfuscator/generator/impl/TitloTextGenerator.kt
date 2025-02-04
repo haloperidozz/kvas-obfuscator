@@ -1,6 +1,6 @@
-package com.github.haloperidozz.obfuscator.generators
+package com.github.haloperidozz.obfuscator.generator.impl
 
-import com.github.haloperidozz.obfuscator.generator.StringTextGenerator
+import com.github.haloperidozz.obfuscator.generator.type.StringTextGenerator
 import com.github.haloperidozz.obfuscator.generator.TextGeneratorCategory
 import com.github.haloperidozz.obfuscator.generator.TextGeneratorMeta
 

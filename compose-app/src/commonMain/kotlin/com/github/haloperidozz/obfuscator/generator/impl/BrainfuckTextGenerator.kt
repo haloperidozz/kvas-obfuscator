@@ -1,6 +1,6 @@
-package com.github.haloperidozz.obfuscator.generators
+package com.github.haloperidozz.obfuscator.generator.impl
 
-import com.github.haloperidozz.obfuscator.generator.SimpleTextGenerator
+import com.github.haloperidozz.obfuscator.generator.type.SimpleTextGenerator
 import com.github.haloperidozz.obfuscator.generator.TextGeneratorCategory
 import com.github.haloperidozz.obfuscator.generator.TextGeneratorMeta
 import com.github.haloperidozz.obfuscator.util.ISO9
