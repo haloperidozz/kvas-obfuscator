@@ -5,13 +5,13 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.Button
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.github.haloperidozz.obfuscator.di.repositoryModule
 import com.github.haloperidozz.obfuscator.di.textGeneratorModule
+import com.github.haloperidozz.obfuscator.ui.theme.AppTheme
 import kvas_obfuscator.compose_app.generated.resources.Res
 import kvas_obfuscator.compose_app.generated.resources.compose_multiplatform
 import org.jetbrains.compose.resources.painterResource
@@ -25,7 +25,7 @@ fun App() = KoinApplication(
         modules(textGeneratorModule, repositoryModule)
     }
 ) {
-    MaterialTheme {
+    AppTheme {
         var showContent by remember { mutableStateOf(false) }
         Column(Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
             Button(onClick = { showContent = !showContent }) {
