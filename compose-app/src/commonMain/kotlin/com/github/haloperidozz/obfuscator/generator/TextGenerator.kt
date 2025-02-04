@@ -1,5 +1,7 @@
 package com.github.haloperidozz.obfuscator.generator
 
-fun interface TextGenerator<T> {
+interface TextGenerator<T> {
+    val meta: TextGeneratorMeta
+
     fun generate(input: String, value: T): String
 }
