@@ -1,11 +1,18 @@
 package com.github.haloperidozz.obfuscator.generators
 
 import com.github.haloperidozz.obfuscator.generator.SelectTextGenerator
+import com.github.haloperidozz.obfuscator.generator.TextGeneratorCategory
+import com.github.haloperidozz.obfuscator.generator.TextGeneratorMeta
 import com.github.haloperidozz.obfuscator.util.Alphabet
 
 class CaesarCipherTextGenerator : SelectTextGenerator(
     Alphabet.RUSSIAN_LOWER.indices.map { index -> "ROT$index" }
 ) {
+    override val meta: TextGeneratorMeta = TextGeneratorMeta(
+        id = "caesar-cipher",
+        category = TextGeneratorCategory.Cipher
+    )
+
     override fun generate(input: String, selected: String, index: Int): String {
         return input.map { char -> shiftChar(char, index) }.joinToString("")
     }

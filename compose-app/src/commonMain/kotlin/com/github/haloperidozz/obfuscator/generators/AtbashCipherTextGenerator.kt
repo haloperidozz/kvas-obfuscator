@@ -1,9 +1,16 @@
 package com.github.haloperidozz.obfuscator.generators
 
 import com.github.haloperidozz.obfuscator.generator.SimpleTextGenerator
+import com.github.haloperidozz.obfuscator.generator.TextGeneratorCategory
+import com.github.haloperidozz.obfuscator.generator.TextGeneratorMeta
 import com.github.haloperidozz.obfuscator.util.Alphabet
 
 class AtbashCipherTextGenerator : SimpleTextGenerator() {
+    override val meta: TextGeneratorMeta = TextGeneratorMeta(
+        id = "atbash-cipher",
+        category = TextGeneratorCategory.Cipher
+    )
+
     override fun generate(input: String): String {
         return input.map { char -> reverseChar(char) }.joinToString("")
     }

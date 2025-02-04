@@ -1,11 +1,18 @@
 package com.github.haloperidozz.obfuscator.generators
 
 import com.github.haloperidozz.obfuscator.generator.SimpleTextGenerator
+import com.github.haloperidozz.obfuscator.generator.TextGeneratorCategory
+import com.github.haloperidozz.obfuscator.generator.TextGeneratorMeta
 import com.github.haloperidozz.obfuscator.util.ISO9
 import kotlin.math.abs
 import kotlin.math.sqrt
 
 class BrainfuckTextGenerator : SimpleTextGenerator() {
+    override val meta: TextGeneratorMeta = TextGeneratorMeta(
+        id = "brainfuck",
+        category = TextGeneratorCategory.Programming
+    )
+
     override fun generate(input: String): String = buildString {
         var lastCharCode = 0
 

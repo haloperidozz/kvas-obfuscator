@@ -1,8 +1,15 @@
 package com.github.haloperidozz.obfuscator.generators
 
 import com.github.haloperidozz.obfuscator.generator.StringTextGenerator
+import com.github.haloperidozz.obfuscator.generator.TextGeneratorCategory
+import com.github.haloperidozz.obfuscator.generator.TextGeneratorMeta
 
 class TitloTextGenerator : StringTextGenerator {
+    override val meta: TextGeneratorMeta = TextGeneratorMeta(
+        id = "titlo",
+        category = TextGeneratorCategory.Other
+    )
+
     override fun generate(input: String, value: String): String {
         return input.mapIndexed { index, char ->
             char + (DIACRITICAL_MAP[value.lowercase().getOrNull(index)] ?: "")

@@ -1,9 +1,16 @@
 package com.github.haloperidozz.obfuscator.generators
 
 import com.github.haloperidozz.obfuscator.generator.FloatTextGenerator
+import com.github.haloperidozz.obfuscator.generator.TextGeneratorCategory
+import com.github.haloperidozz.obfuscator.generator.TextGeneratorMeta
 import com.github.haloperidozz.obfuscator.util.toUnicodeCharString
 
 class ZalgoTextGenerator : FloatTextGenerator(range = 1.0f..100.0f) {
+    override val meta: TextGeneratorMeta = TextGeneratorMeta(
+        id = "zalgo",
+        category = TextGeneratorCategory.Other
+    )
+
     override fun doGenerate(input: String, value: Float): String {
         return input.map { char ->
             char + generateMarks(value.toInt())
