@@ -1,4 +1,6 @@
-package com.github.haloperidozz.obfuscator.generator
+package com.github.haloperidozz.obfuscator.generator.type
+
+import com.github.haloperidozz.obfuscator.generator.TextGenerator
 
 abstract class FloatTextGenerator(
     val range: ClosedFloatingPointRange<Float> = 0.0f..1.0f

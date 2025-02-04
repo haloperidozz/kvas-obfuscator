@@ -1,4 +1,6 @@
-package com.github.haloperidozz.obfuscator.generator
+package com.github.haloperidozz.obfuscator.generator.type
+
+import com.github.haloperidozz.obfuscator.generator.TextGenerator
 
 abstract class SelectTextGenerator(
     val available: List<String>
