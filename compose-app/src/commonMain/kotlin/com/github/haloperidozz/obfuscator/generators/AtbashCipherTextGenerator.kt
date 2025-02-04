@@ -1,4 +1,4 @@
-package com.github.haloperidozz.obfuscator.generator.impl
+package com.github.haloperidozz.obfuscator.generators
 
 import com.github.haloperidozz.obfuscator.generator.SimpleTextGenerator
 import com.github.haloperidozz.obfuscator.util.Alphabet
