@@ -10,7 +10,6 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.github.haloperidozz.obfuscator.di.repositoryModule
-import com.github.haloperidozz.obfuscator.di.textGeneratorModule
 import com.github.haloperidozz.obfuscator.ui.theme.AppTheme
 import kvas_obfuscator.compose_app.generated.resources.Res
 import kvas_obfuscator.compose_app.generated.resources.compose_multiplatform
@@ -22,7 +21,7 @@ import org.koin.compose.KoinApplication
 @Preview
 fun App() = KoinApplication(
     application = {
-        modules(textGeneratorModule, repositoryModule)
+        modules(repositoryModule)
     }
 ) {
     AppTheme {

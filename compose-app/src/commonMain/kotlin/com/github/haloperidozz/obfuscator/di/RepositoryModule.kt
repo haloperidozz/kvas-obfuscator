@@ -5,5 +5,5 @@ import com.github.haloperidozz.obfuscator.repository.TextGeneratorRepositoryImpl
 import org.koin.dsl.module
 
 val repositoryModule = module {
-    single<TextGeneratorRepository> { TextGeneratorRepositoryImpl(getAll()) }
+    single<TextGeneratorRepository> { TextGeneratorRepositoryImpl() }
 }
