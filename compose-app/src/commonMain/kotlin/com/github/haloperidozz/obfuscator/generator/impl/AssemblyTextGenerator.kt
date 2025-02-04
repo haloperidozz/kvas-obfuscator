@@ -3,7 +3,6 @@ package com.github.haloperidozz.obfuscator.generator.impl
 import com.github.haloperidozz.obfuscator.generator.type.SimpleTextGenerator
 import com.github.haloperidozz.obfuscator.generator.TextGeneratorCategory
 import com.github.haloperidozz.obfuscator.generator.TextGeneratorMeta
-import com.github.haloperidozz.obfuscator.util.ISO9
 
 class AssemblyTextGenerator : SimpleTextGenerator() {
     override val meta: TextGeneratorMeta = TextGeneratorMeta(
@@ -12,7 +11,7 @@ class AssemblyTextGenerator : SimpleTextGenerator() {
     )
 
     override fun generate(input: String): String {
-        val bytes = ISO9.Simple.transliterate(input).encodeToByteArray()
+        val bytes = input.encodeToByteArray()
 
         return buildString {
             appendLine("section .bss")

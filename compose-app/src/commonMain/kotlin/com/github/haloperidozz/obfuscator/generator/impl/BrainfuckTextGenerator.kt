@@ -3,7 +3,6 @@ package com.github.haloperidozz.obfuscator.generator.impl
 import com.github.haloperidozz.obfuscator.generator.type.SimpleTextGenerator
 import com.github.haloperidozz.obfuscator.generator.TextGeneratorCategory
 import com.github.haloperidozz.obfuscator.generator.TextGeneratorMeta
-import com.github.haloperidozz.obfuscator.util.ISO9
 import kotlin.math.abs
 import kotlin.math.sqrt
 
@@ -16,7 +15,7 @@ class BrainfuckTextGenerator : SimpleTextGenerator() {
     override fun generate(input: String): String = buildString {
         var lastCharCode = 0
 
-        ISO9.Simple.transliterate(input).forEach { char ->
+        input.forEach { char ->
             val diff = char.code - lastCharCode
 
             if (diff != 0) {
