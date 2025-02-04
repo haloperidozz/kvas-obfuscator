@@ -1,5 +1,10 @@
 package com.github.haloperidozz.obfuscator.generator
 
+import com.github.haloperidozz.obfuscator.generator.type.FloatTextGenerator
+import com.github.haloperidozz.obfuscator.generator.type.SelectTextGenerator
+import com.github.haloperidozz.obfuscator.generator.type.SimpleTextGenerator
+import com.github.haloperidozz.obfuscator.generator.type.StringTextGenerator
+
 inline fun FloatTextGenerator.modify(
     crossinline customGenerate: (
         generator: TextGenerator<Float>, input: String, value: Float
