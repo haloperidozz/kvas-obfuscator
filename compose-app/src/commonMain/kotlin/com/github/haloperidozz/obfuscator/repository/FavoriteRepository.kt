@@ -1,6 +1,6 @@
 package com.github.haloperidozz.obfuscator.repository
 
-import com.github.haloperidozz.obfuscator.model.generator.TextGeneratorInfo
+import com.github.haloperidozz.obfuscator.generator.model.TextGeneratorInfo
 import kotlinx.coroutines.flow.Flow
 
 interface FavoriteRepository {

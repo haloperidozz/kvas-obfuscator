@@ -1,4 +1,4 @@
-package com.github.haloperidozz.obfuscator.model.generator
+package com.github.haloperidozz.obfuscator.generator.model
 
 import com.github.haloperidozz.obfuscator.generator.TextGenerator
 

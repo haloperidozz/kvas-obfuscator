@@ -1,7 +1,7 @@
 package com.github.haloperidozz.obfuscator.repository
 
-import com.github.haloperidozz.obfuscator.model.generator.TextGeneratorCategory
-import com.github.haloperidozz.obfuscator.model.generator.TextGeneratorInfo
+import com.github.haloperidozz.obfuscator.generator.model.TextGeneratorCategory
+import com.github.haloperidozz.obfuscator.generator.model.TextGeneratorInfo
 
 interface TextGeneratorRepository {
     operator fun get(id: String): TextGeneratorInfo<*>?

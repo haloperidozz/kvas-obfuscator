@@ -3,8 +3,8 @@ package com.github.haloperidozz.obfuscator.data.generator
 import com.github.haloperidozz.obfuscator.generator.impl.*
 import com.github.haloperidozz.obfuscator.generator.modify
 import com.github.haloperidozz.obfuscator.generator.type.SimpleTextGenerator
-import com.github.haloperidozz.obfuscator.model.generator.TextGeneratorCategory
-import com.github.haloperidozz.obfuscator.model.generator.TextGeneratorInfo
+import com.github.haloperidozz.obfuscator.generator.model.TextGeneratorCategory
+import com.github.haloperidozz.obfuscator.generator.model.TextGeneratorInfo
 import com.github.haloperidozz.obfuscator.repository.TextGeneratorRepository
 import com.github.haloperidozz.obfuscator.util.ISO9
 import kotlin.io.encoding.Base64
