@@ -1,6 +1,7 @@
 package com.github.haloperidozz.obfuscator.platform
 
 import androidx.compose.material3.ColorScheme
+import androidx.compose.runtime.Composable
 import java.awt.FileDialog
 import java.awt.Frame
 import java.nio.file.Files
@@ -10,6 +11,7 @@ import java.nio.file.StandardOpenOption
 class PlatformImpl : Platform {
     override val type: PlatformType = PlatformType.Desktop
 
+    @Composable
     override fun dynamicColorScheme(darkTheme: Boolean): ColorScheme? {
         return null
     }
