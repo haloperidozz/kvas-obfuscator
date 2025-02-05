@@ -16,6 +16,6 @@ class FavoriteRepositoryImpl(
     }
 
     override suspend fun save(favorites: List<TextGeneratorInfo<*>>) {
-        dataSource.save(favorites.map { generator -> generator.id })
+        dataSource.save(favorites.map { generator -> generator.id }.toSet())
     }
 }

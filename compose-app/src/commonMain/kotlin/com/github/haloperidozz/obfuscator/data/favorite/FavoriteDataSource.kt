@@ -3,7 +3,7 @@ package com.github.haloperidozz.obfuscator.data.favorite
 import kotlinx.coroutines.flow.Flow
 
 interface FavoriteDataSource {
-    suspend fun all(): Flow<List<String>>
+    fun all(): Flow<Set<String>>
 
-    suspend fun save(favorites: List<String>)
+    suspend fun save(favorites: Set<String>)
 }
