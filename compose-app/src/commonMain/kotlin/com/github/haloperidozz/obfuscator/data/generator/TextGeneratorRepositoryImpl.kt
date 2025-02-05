@@ -1,4 +1,4 @@
-package com.github.haloperidozz.obfuscator.data
+package com.github.haloperidozz.obfuscator.data.generator
 
 import com.github.haloperidozz.obfuscator.generator.impl.*
 import com.github.haloperidozz.obfuscator.generator.modify
