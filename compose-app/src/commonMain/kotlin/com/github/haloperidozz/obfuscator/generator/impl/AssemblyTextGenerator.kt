@@ -1,15 +1,8 @@
 package com.github.haloperidozz.obfuscator.generator.impl
 
 import com.github.haloperidozz.obfuscator.generator.type.SimpleTextGenerator
-import com.github.haloperidozz.obfuscator.generator.TextGeneratorCategory
-import com.github.haloperidozz.obfuscator.generator.TextGeneratorMeta
 
 class AssemblyTextGenerator : SimpleTextGenerator() {
-    override val meta: TextGeneratorMeta = TextGeneratorMeta(
-        id = "assembly",
-        category = TextGeneratorCategory.Programming
-    )
-
     override fun generate(input: String): String {
         val bytes = input.encodeToByteArray()
 

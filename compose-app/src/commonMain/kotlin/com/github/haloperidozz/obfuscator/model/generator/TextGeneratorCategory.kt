@@ -1,4 +1,4 @@
-package com.github.haloperidozz.obfuscator.generator
+package com.github.haloperidozz.obfuscator.model.generator
 
 enum class TextGeneratorCategory {
     Shitposter,
