@@ -2,35 +2,31 @@ package com.github.haloperidozz.obfuscator.util
 
 import androidx.compose.material3.ColorScheme
 import androidx.compose.runtime.Composable
-import kotlinx.coroutines.channels.BufferOverflow
+import androidx.compose.ui.awt.ComposeWindow
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.asSharedFlow
-import java.awt.FileDialog
-import java.awt.Frame
+import java.io.File
 import java.nio.file.Files
-import java.nio.file.Paths
 import java.nio.file.StandardOpenOption
+import javax.swing.JFileChooser
 
-actual class Platform {
-    private val _events = MutableSharedFlow<ExternalEvent>(
-        replay = 0,
-        onBufferOverflow = BufferOverflow.DROP_OLDEST,
-        extraBufferCapacity = 1,
-    )
-
+actual class Platform(
+    private val composeWindow: ComposeWindow,
+    actual val externalEvents: Flow<ExternalEvent>
+) {
     actual val type: PlatformType = PlatformType.Desktop
-    actual val externalEvents: Flow<ExternalEvent> = _events.asSharedFlow()
 
     actual fun saveToFile(text: String, defaultFileName: String) {
-        val fileDialog = FileDialog(null as Frame?, "Save", FileDialog.SAVE)
+        val fileChooser = JFileChooser().apply {
+            isVisible = true
+            selectedFile = File(defaultFileName)
+            dialogType = JFileChooser.SAVE_DIALOG
+        }
 
-        fileDialog.file = defaultFileName
-        fileDialog.isVisible = true
+        val userOption = fileChooser.showSaveDialog(composeWindow)
 
-        if (fileDialog.directory != null && fileDialog.file != null) {
+        if (userOption == JFileChooser.APPROVE_OPTION) {
             Files.write(
-                Paths.get(fileDialog.directory, fileDialog.file),
+                fileChooser.selectedFile.toPath(),
                 text.toByteArray(),
                 StandardOpenOption.CREATE,
                 StandardOpenOption.TRUNCATE_EXISTING
@@ -45,9 +41,5 @@ actual class Platform {
     @Composable
     actual fun dynamicColorScheme(darkTheme: Boolean): ColorScheme? {
         return null
-    }
-
-    fun produceEvent(event: ExternalEvent) {
-        _events.tryEmit(event)
     }
 }

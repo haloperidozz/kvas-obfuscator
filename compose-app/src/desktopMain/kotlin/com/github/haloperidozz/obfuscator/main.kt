@@ -11,22 +11,30 @@ import com.github.haloperidozz.obfuscator.di.commonModules
 import com.github.haloperidozz.obfuscator.util.ExternalEvent
 import com.github.haloperidozz.obfuscator.util.LocalPlatformProvider
 import com.github.haloperidozz.obfuscator.util.Platform
+import kotlinx.coroutines.channels.BufferOverflow
+import kotlinx.coroutines.flow.MutableSharedFlow
 import org.koin.compose.KoinApplication
 
 fun main() = application {
-    val platform = remember { Platform() }
+    val externalEvents = remember {
+        MutableSharedFlow<ExternalEvent>(
+            replay = 0,
+            extraBufferCapacity = 1,
+            onBufferOverflow = BufferOverflow.DROP_OLDEST,
+        )
+    }
 
     Window(
         onCloseRequest = ::exitApplication,
         title = "kvas-obfuscator",
         onKeyEvent = {
             if (it.type == KeyEventType.KeyUp && it.key == Key.Escape) {
-                platform.produceEvent(ExternalEvent.Back)
+                externalEvents.tryEmit(ExternalEvent.Back)
             }
             false
         },
     ) {
-        LocalPlatformProvider(platform) {
+        LocalPlatformProvider(remember { Platform(window, externalEvents) }) {
             KoinApplication(application = { commonModules() }) {
                 App()
             }
