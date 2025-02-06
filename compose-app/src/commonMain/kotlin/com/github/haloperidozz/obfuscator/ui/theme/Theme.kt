@@ -5,8 +5,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
-import com.github.haloperidozz.obfuscator.platform.Platform
-import org.koin.compose.koinInject
+import com.github.haloperidozz.obfuscator.util.LocalPlatform
 
 private val lightScheme = lightColorScheme(
     primary = primaryLight,
@@ -87,9 +86,9 @@ private val darkScheme = darkColorScheme(
 @Composable
 fun AppTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
-    platform: Platform = koinInject<Platform>(),
     content: @Composable () -> Unit
 ) {
+    val platform = LocalPlatform.current
     val dynamicColorScheme = platform.dynamicColorScheme(darkTheme)
 
     MaterialTheme(
