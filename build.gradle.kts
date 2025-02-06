@@ -6,4 +6,17 @@ plugins {
     alias(libs.plugins.composeMultiplatform) apply false
     alias(libs.plugins.composeCompiler) apply false
     alias(libs.plugins.kotlinMultiplatform) apply false
+
+    // The Spotless plugin for code formatting
+    alias(libs.plugins.spotless)
+}
+
+configure<com.diffplug.gradle.spotless.SpotlessExtension> {
+    kotlin {
+        target("compose-app/**/*.kt")
+        targetExclude("**/build/**/*.kt")
+        licenseHeaderFile(rootProject.file("spotless.license.kt"))
+        trimTrailingWhitespace()
+        endWithNewline()
+    }
 }
