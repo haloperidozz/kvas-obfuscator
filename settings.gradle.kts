@@ -1,3 +1,5 @@
+@file:Suppress("UnstableApiUsage")
+
 rootProject.name = "kvas-obfuscator"
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
