@@ -16,11 +16,14 @@
  */
 package com.github.haloperidozz.obfuscator
 
+import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
+import androidx.activity.SystemBarStyle
 import androidx.activity.addCallback
 import androidx.activity.compose.setContent
+import androidx.activity.enableEdgeToEdge
 import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.runtime.remember
@@ -83,5 +86,16 @@ class MainActivity : ComponentActivity() {
         onBackPressedDispatcher.addCallback {
             externalEvents.tryEmit(ExternalEvent.Back)
         }
+
+        // https://stackoverflow.com/a/79267436
+        val transparentBarStyle = SystemBarStyle.light(
+            scrim = Color.TRANSPARENT,
+            darkScrim = Color.TRANSPARENT
+        )
+
+        enableEdgeToEdge(
+            statusBarStyle = transparentBarStyle,
+            navigationBarStyle = transparentBarStyle
+        )
     }
 }
