@@ -16,8 +16,6 @@
  */
 package com.github.haloperidozz.obfuscator.util
 
-import androidx.compose.material3.ColorScheme
-import androidx.compose.runtime.Composable
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.emptyFlow
 
@@ -31,10 +29,5 @@ actual class Platform {
 
     actual fun share(text: String) {
         // No-op: Share functionality is not supported on web
-    }
-
-    @Composable
-    actual fun dynamicColorScheme(darkTheme: Boolean): ColorScheme? {
-        return null
     }
 }

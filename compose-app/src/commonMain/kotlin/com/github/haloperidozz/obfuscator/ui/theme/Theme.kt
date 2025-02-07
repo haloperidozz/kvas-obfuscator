@@ -17,11 +17,11 @@
 package com.github.haloperidozz.obfuscator.ui.theme
 
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
-import com.github.haloperidozz.obfuscator.util.LocalPlatform
 
 private val lightScheme = lightColorScheme(
     primary = primaryLight,
@@ -102,16 +102,14 @@ private val darkScheme = darkColorScheme(
 @Composable
 fun AppTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
+    darkDynamicScheme: ColorScheme? = null,
+    lightDynamicScheme: ColorScheme? = null,
     content: @Composable () -> Unit
 ) {
-    val platform = LocalPlatform.current
-    val dynamicColorScheme = platform.dynamicColorScheme(darkTheme)
-
     MaterialTheme(
         colorScheme = when {
-            dynamicColorScheme != null -> dynamicColorScheme
-            darkTheme -> darkScheme
-            else -> lightScheme
+            darkTheme -> darkDynamicScheme ?: darkScheme
+            else -> lightDynamicScheme ?: lightScheme
         },
         content = content
     )

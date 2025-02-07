@@ -16,14 +16,18 @@
  */
 package com.github.haloperidozz.obfuscator
 
+import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.addCallback
 import androidx.activity.compose.setContent
+import androidx.compose.material3.dynamicDarkColorScheme
+import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.tooling.preview.Preview
 import com.github.haloperidozz.obfuscator.di.commonModules
+import com.github.haloperidozz.obfuscator.ui.theme.AppTheme
 import com.github.haloperidozz.obfuscator.util.ExternalEvent
 import com.github.haloperidozz.obfuscator.util.LocalPlatformProvider
 import com.github.haloperidozz.obfuscator.util.Platform
@@ -45,6 +49,22 @@ class MainActivity : ComponentActivity() {
         setContent {
             val platform = remember(this) { Platform(this, externalEvents) }
 
+            val darkDynamicScheme = remember {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                    dynamicDarkColorScheme(this)
+                } else {
+                    null
+                }
+            }
+
+            val lightDynamicScheme = remember {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                    dynamicLightColorScheme(this)
+                } else {
+                    null
+                }
+            }
+
             LocalPlatformProvider(platform) {
                 KoinApplication(
                     application = {
@@ -52,7 +72,12 @@ class MainActivity : ComponentActivity() {
                         commonModules()
                     }
                 ) {
-                    App()
+                    AppTheme(
+                        darkDynamicScheme = darkDynamicScheme,
+                        lightDynamicScheme = lightDynamicScheme
+                    ) {
+                        App()
+                    }
                 }
             }
         }

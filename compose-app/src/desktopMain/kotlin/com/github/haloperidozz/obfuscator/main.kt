@@ -24,6 +24,7 @@ import androidx.compose.ui.input.key.type
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
 import com.github.haloperidozz.obfuscator.di.commonModules
+import com.github.haloperidozz.obfuscator.ui.theme.AppTheme
 import com.github.haloperidozz.obfuscator.util.ExternalEvent
 import com.github.haloperidozz.obfuscator.util.LocalPlatformProvider
 import com.github.haloperidozz.obfuscator.util.Platform
@@ -52,7 +53,7 @@ fun main() = application {
     ) {
         LocalPlatformProvider(remember { Platform(window, externalEvents) }) {
             KoinApplication(application = { commonModules() }) {
-                App()
+                AppTheme { App() }
             }
         }
     }
