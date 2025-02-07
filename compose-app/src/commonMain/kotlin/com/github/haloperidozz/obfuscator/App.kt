@@ -16,9 +16,27 @@
  */
 package com.github.haloperidozz.obfuscator
 
-import androidx.compose.runtime.Composable
+import androidx.compose.animation.Crossfade
+import androidx.compose.foundation.background
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.runtime.*
+import androidx.compose.ui.Modifier
+import com.github.haloperidozz.obfuscator.ui.screen.Screen
+import com.github.haloperidozz.obfuscator.ui.screen.info.InfoScreen
+import com.github.haloperidozz.obfuscator.ui.screen.main.MainScreen
 
 @Composable
 fun App() {
-    // TODO
+    var currentScreen by remember { mutableStateOf(Screen.Main) }
+    val switchScreen: (Screen) -> Unit = { screen -> currentScreen = screen }
+
+    Crossfade(
+        targetState = currentScreen,
+        modifier = Modifier.background(MaterialTheme.colorScheme.background)
+    ) { screen ->
+        when (screen) {
+            Screen.Main -> MainScreen(switchScreen)
+            Screen.Info -> InfoScreen(switchScreen)
+        }
+    }
 }
