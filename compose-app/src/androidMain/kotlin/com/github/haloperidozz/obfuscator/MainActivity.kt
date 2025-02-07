@@ -20,13 +20,14 @@ import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.SystemBarStyle
-import androidx.activity.addCallback
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.runtime.remember
+import androidx.lifecycle.lifecycleScope
 import com.github.haloperidozz.obfuscator.di.commonModules
 import com.github.haloperidozz.obfuscator.ui.theme.AppTheme
 import com.github.haloperidozz.obfuscator.util.ExternalEvent
@@ -34,6 +35,7 @@ import com.github.haloperidozz.obfuscator.util.LocalPlatformProvider
 import com.github.haloperidozz.obfuscator.util.Platform
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.launch
 import org.koin.android.ext.koin.androidContext
 import org.koin.compose.KoinApplication
 
@@ -83,10 +85,6 @@ class MainActivity : ComponentActivity() {
             }
         }
 
-        onBackPressedDispatcher.addCallback {
-            externalEvents.tryEmit(ExternalEvent.Back)
-        }
-
         // https://stackoverflow.com/a/79267436
         val transparentBarStyle = SystemBarStyle.light(
             scrim = Color.TRANSPARENT,
@@ -97,5 +95,19 @@ class MainActivity : ComponentActivity() {
             statusBarStyle = transparentBarStyle,
             navigationBarStyle = transparentBarStyle
         )
+
+        val callback = object : OnBackPressedCallback(false) {
+            override fun handleOnBackPressed() {
+                externalEvents.tryEmit(ExternalEvent.Back)
+            }
+        }
+
+        lifecycleScope.launch {
+            externalEvents.subscriptionCount.collect { count ->
+                callback.isEnabled = count > 0
+            }
+        }
+
+        onBackPressedDispatcher.addCallback(callback)
     }
 }
