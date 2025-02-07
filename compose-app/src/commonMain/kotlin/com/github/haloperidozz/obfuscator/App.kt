@@ -22,9 +22,9 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import com.github.haloperidozz.obfuscator.ui.screen.Screen
-import com.github.haloperidozz.obfuscator.ui.screen.info.InfoScreen
-import com.github.haloperidozz.obfuscator.ui.screen.main.MainScreen
-import com.github.haloperidozz.obfuscator.ui.screen.select.SelectScreen
+import com.github.haloperidozz.obfuscator.ui.screen.InfoScreen
+import com.github.haloperidozz.obfuscator.ui.screen.MainScreen
+import com.github.haloperidozz.obfuscator.ui.screen.SelectScreen
 
 @Composable
 fun App() {

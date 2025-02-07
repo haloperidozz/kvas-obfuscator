@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package com.github.haloperidozz.obfuscator.ui.screen.main
+package com.github.haloperidozz.obfuscator.ui.screen
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
@@ -29,7 +29,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.unit.dp
-import com.github.haloperidozz.obfuscator.ui.screen.Screen
 import com.github.haloperidozz.obfuscator.util.LocalPlatform
 import com.github.haloperidozz.obfuscator.util.PlatformType
 import kotlinx.coroutines.launch

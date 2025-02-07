@@ -14,18 +14,17 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package com.github.haloperidozz.obfuscator.ui.screen.select
+package com.github.haloperidozz.obfuscator.ui.screen
 
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import com.github.haloperidozz.obfuscator.ui.screen.Screen
 import com.github.haloperidozz.obfuscator.util.ExternalEvent
 import com.github.haloperidozz.obfuscator.util.LocalPlatform
 
 @Composable
-fun SelectScreen(switchScreen: (Screen) -> Unit) {
+fun InfoScreen(switchScreen: (Screen) -> Unit) {
     val platform = LocalPlatform.current
 
     LaunchedEffect(Unit) {
