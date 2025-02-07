@@ -101,10 +101,6 @@ android {
     }
 }
 
-dependencies {
-    debugImplementation(compose.uiTooling)
-}
-
 compose.desktop {
     application {
         mainClass = "com.github.haloperidozz.obfuscator.MainKt"

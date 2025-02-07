@@ -23,9 +23,7 @@ import androidx.activity.addCallback
 import androidx.activity.compose.setContent
 import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
-import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
-import androidx.compose.ui.tooling.preview.Preview
 import com.github.haloperidozz.obfuscator.di.commonModules
 import com.github.haloperidozz.obfuscator.ui.theme.AppTheme
 import com.github.haloperidozz.obfuscator.util.ExternalEvent
@@ -86,10 +84,4 @@ class MainActivity : ComponentActivity() {
             externalEvents.tryEmit(ExternalEvent.Back)
         }
     }
-}
-
-@Preview
-@Composable
-fun AppAndroidPreview() {
-    App()
 }
