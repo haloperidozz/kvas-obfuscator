@@ -18,5 +18,6 @@ package com.github.haloperidozz.obfuscator.ui.screen
 
 enum class Screen {
     Main,
-    Info
+    Info,
+    Select
 }

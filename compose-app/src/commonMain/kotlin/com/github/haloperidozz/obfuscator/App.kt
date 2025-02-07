@@ -24,6 +24,7 @@ import androidx.compose.ui.Modifier
 import com.github.haloperidozz.obfuscator.ui.screen.Screen
 import com.github.haloperidozz.obfuscator.ui.screen.info.InfoScreen
 import com.github.haloperidozz.obfuscator.ui.screen.main.MainScreen
+import com.github.haloperidozz.obfuscator.ui.screen.select.SelectScreen
 
 @Composable
 fun App() {
@@ -37,6 +38,7 @@ fun App() {
         when (screen) {
             Screen.Main -> MainScreen(switchScreen)
             Screen.Info -> InfoScreen(switchScreen)
+            Screen.Select -> SelectScreen(switchScreen)
         }
     }
 }
