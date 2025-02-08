@@ -79,6 +79,7 @@ fun MainScreen(
 
             BottomContent(
                 switchScreen = switchScreen,
+                currentGenerator = uiState.currentGenerator
             )
         }
     }
@@ -287,6 +288,7 @@ private fun SelectValueComposable(
 @Composable
 private fun BottomContent(
     switchScreen: (Screen) -> Unit,
+    currentGenerator: TextGeneratorInfo<*>,
     modifier: Modifier = Modifier
 ) {
     Row(
@@ -305,7 +307,7 @@ private fun BottomContent(
             shape = MaterialTheme.shapes.large,
             elevation = null
         ) {
-            Text(text = "select")
+            Text(text = currentGenerator.id)
         }
 
         Button(
