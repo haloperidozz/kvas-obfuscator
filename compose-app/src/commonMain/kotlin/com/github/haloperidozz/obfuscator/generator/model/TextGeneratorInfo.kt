@@ -17,9 +17,24 @@
 package com.github.haloperidozz.obfuscator.generator.model
 
 import com.github.haloperidozz.obfuscator.generator.TextGenerator
+import com.github.haloperidozz.obfuscator.generator.type.FloatTextGenerator
+import com.github.haloperidozz.obfuscator.generator.type.SelectTextGenerator
+import com.github.haloperidozz.obfuscator.generator.type.StringTextGenerator
 
 data class TextGeneratorInfo<T>(
     val id: String,
     val category: TextGeneratorCategory = TextGeneratorCategory.Unknown,
     val instance: TextGenerator<T>
-)
+) {
+    fun defaultValue(): TextGeneratorValue? {
+        return when (instance) {
+            is FloatTextGenerator -> {
+                val defaultValue = instance.range.endInclusive / 2.0f
+                TextGeneratorValue.FloatValue(defaultValue)
+            }
+            is StringTextGenerator -> TextGeneratorValue.StringValue("")
+            is SelectTextGenerator -> TextGeneratorValue.SelectValue(0)
+            else -> null
+        }
+    }
+}
