@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package com.github.haloperidozz.obfuscator.ui.modelview
+package com.github.haloperidozz.obfuscator.ui.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -22,7 +22,7 @@ import com.github.haloperidozz.obfuscator.data.settings.SettingsStorage
 import com.github.haloperidozz.obfuscator.generator.model.TextGeneratorInfo
 import com.github.haloperidozz.obfuscator.repository.TextGeneratorRepository
 import com.github.haloperidozz.obfuscator.ui.model.SelectScreenUiState
-import com.github.haloperidozz.obfuscator.ui.modelview.shared.SharedTextGeneratorHolder
+import com.github.haloperidozz.obfuscator.ui.viewmodel.shared.SharedTextGeneratorHolder
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow

@@ -32,7 +32,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.github.haloperidozz.obfuscator.generator.model.TextGeneratorInfo
-import com.github.haloperidozz.obfuscator.ui.modelview.SelectScreenViewModel
+import com.github.haloperidozz.obfuscator.ui.viewmodel.SelectScreenViewModel
 import com.github.haloperidozz.obfuscator.util.ExternalEvent
 import com.github.haloperidozz.obfuscator.util.LocalPlatform
 import org.koin.compose.viewmodel.koinViewModel

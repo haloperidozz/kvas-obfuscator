@@ -16,8 +16,8 @@
  */
 package com.github.haloperidozz.obfuscator.di
 
-import com.github.haloperidozz.obfuscator.ui.modelview.MainScreenViewModel
-import com.github.haloperidozz.obfuscator.ui.modelview.shared.SharedTextGeneratorHolder
+import com.github.haloperidozz.obfuscator.ui.viewmodel.MainScreenViewModel
+import com.github.haloperidozz.obfuscator.ui.viewmodel.shared.SharedTextGeneratorHolder
 import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
 

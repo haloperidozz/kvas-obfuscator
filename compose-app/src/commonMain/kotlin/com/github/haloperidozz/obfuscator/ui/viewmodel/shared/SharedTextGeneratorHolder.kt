@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package com.github.haloperidozz.obfuscator.ui.modelview.shared
+package com.github.haloperidozz.obfuscator.ui.viewmodel.shared
 
 import com.github.haloperidozz.obfuscator.generator.model.TextGeneratorInfo
 import com.github.haloperidozz.obfuscator.generator.model.TextGeneratorValue

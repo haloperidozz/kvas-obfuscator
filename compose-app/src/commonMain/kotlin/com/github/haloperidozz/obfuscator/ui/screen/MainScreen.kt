@@ -40,7 +40,7 @@ import com.github.haloperidozz.obfuscator.generator.model.TextGeneratorInfo
 import com.github.haloperidozz.obfuscator.generator.model.TextGeneratorValue
 import com.github.haloperidozz.obfuscator.generator.type.FloatTextGenerator
 import com.github.haloperidozz.obfuscator.generator.type.SelectTextGenerator
-import com.github.haloperidozz.obfuscator.ui.modelview.MainScreenViewModel
+import com.github.haloperidozz.obfuscator.ui.viewmodel.MainScreenViewModel
 import com.github.haloperidozz.obfuscator.util.LocalPlatform
 import com.github.haloperidozz.obfuscator.util.PlatformType
 import kotlinx.coroutines.launch
