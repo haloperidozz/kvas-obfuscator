@@ -17,11 +17,18 @@
 package com.github.haloperidozz.obfuscator.ui.screen
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ContentCopy
+import androidx.compose.material.icons.filled.Done
 import androidx.compose.material.icons.filled.Share
 import androidx.compose.material.icons.outlined.Info
+import androidx.compose.material.icons.outlined.Save
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -29,16 +36,23 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.unit.dp
+import com.github.haloperidozz.obfuscator.generator.model.TextGeneratorInfo
+import com.github.haloperidozz.obfuscator.generator.model.TextGeneratorValue
+import com.github.haloperidozz.obfuscator.generator.type.FloatTextGenerator
+import com.github.haloperidozz.obfuscator.generator.type.SelectTextGenerator
+import com.github.haloperidozz.obfuscator.ui.modelview.MainScreenViewModel
 import com.github.haloperidozz.obfuscator.util.LocalPlatform
 import com.github.haloperidozz.obfuscator.util.PlatformType
 import kotlinx.coroutines.launch
-
-// TODO: Add androidx.compose.material:material-icons-extended dependency and replace some icons here
-// TODO: Write a ViewModel for this screen
-// TODO: Write TextGeneratorValueEditor implementation
+import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
-fun MainScreen(switchScreen: (Screen) -> Unit) {
+fun MainScreen(
+    switchScreen: (Screen) -> Unit,
+    viewModel: MainScreenViewModel = koinViewModel()
+) {
+    val uiState by viewModel.uiState.collectAsState()
+
     Scaffold(
         containerColor = MaterialTheme.colorScheme.surfaceContainer,
     ) { paddingValues ->
@@ -49,11 +63,18 @@ fun MainScreen(switchScreen: (Screen) -> Unit) {
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
             TextFieldLayout(
+                onTextChanged = { text -> viewModel.updateText(text) },
+                currentText = uiState.currentText,
+                currentGeneratedText = uiState.currentGeneratedText,
                 modifier = Modifier.weight(1.0f)
             )
 
             TextGeneratorValueEditor(
-
+                currentGenerator = uiState.currentGenerator,
+                updateGeneratorValue = {
+                    value -> viewModel.updateGeneratorValue(value)
+                },
+                currentGeneratorValue = uiState.generatorValue,
             )
 
             BottomContent(
@@ -65,6 +86,9 @@ fun MainScreen(switchScreen: (Screen) -> Unit) {
 
 @Composable
 private fun TextFieldLayout(
+    onTextChanged: (String) -> Unit,
+    currentText: String,
+    currentGeneratedText: String,
     modifier: Modifier = Modifier
 ) {
     BoxWithConstraints(modifier) {
@@ -74,26 +98,26 @@ private fun TextFieldLayout(
             Column(modifier = Modifier.fillMaxSize()) {
                 InputTextField(
                     modifier = Modifier.fillMaxSize().weight(1f),
-                    currentText = "",
-                    onTextChanged = {  }
+                    currentText = currentText,
+                    onTextChanged = onTextChanged
                 )
                 Spacer(modifier = Modifier.height(12.dp))
                 ResultTextField(
                     modifier = Modifier.fillMaxSize().weight(1f),
-                    currentGeneratedText = ""
+                    currentGeneratedText = currentGeneratedText
                 )
             }
         } else {
             Row(modifier = Modifier.fillMaxSize()) {
                 InputTextField(
                     modifier = Modifier.fillMaxSize().weight(1f),
-                    currentText = "",
-                    onTextChanged = {  }
+                    currentText = currentText,
+                    onTextChanged = onTextChanged
                 )
                 Spacer(modifier = Modifier.width(16.dp))
                 ResultTextField(
                     modifier = Modifier.fillMaxSize().weight(1f),
-                    currentGeneratedText = ""
+                    currentGeneratedText = currentGeneratedText
                 )
             }
         }
@@ -147,7 +171,7 @@ private fun ResultTextField(
                     coroutineScope.launch { tooltipState.show() }
                 }
             ) {
-                Icon(Icons.Default.Share, contentDescription = "Copy")
+                Icon(Icons.Default.ContentCopy, contentDescription = "Copy")
             }
         }
 
@@ -156,7 +180,7 @@ private fun ResultTextField(
                 IconButton(onClick = {
                     platform.saveToFile(currentGeneratedText)
                 }) {
-                    Icon(Icons.Default.Share, contentDescription = "Save")
+                    Icon(Icons.Outlined.Save, contentDescription = "Save")
                 }
             }
             PlatformType.Android -> {
@@ -173,9 +197,91 @@ private fun ResultTextField(
 
 @Composable
 fun TextGeneratorValueEditor(
+    currentGenerator: TextGeneratorInfo<*>,
+    updateGeneratorValue: (value: TextGeneratorValue) -> Unit,
+    currentGeneratorValue: TextGeneratorValue?,
     modifier: Modifier = Modifier
 ) {
+    when (currentGeneratorValue) {
+        is TextGeneratorValue.FloatValue -> {
+            if (currentGenerator.instance !is FloatTextGenerator) {
+                return
+            }
 
+            Slider(
+                value = currentGeneratorValue.value,
+                valueRange = currentGenerator.instance.range,
+                onValueChange = { value ->
+                    updateGeneratorValue(TextGeneratorValue.FloatValue(value))
+                },
+                modifier = modifier
+            )
+        }
+
+        is TextGeneratorValue.StringValue -> {
+            CustomTextField(
+                value = currentGeneratorValue.value,
+                onValueChange = { value ->
+                    updateGeneratorValue(TextGeneratorValue.StringValue(value))
+                },
+                placeholder = { Text(text = "Special Text Here") },
+                singleLine = true,
+                modifier = modifier.fillMaxWidth()
+            )
+        }
+
+        is TextGeneratorValue.SelectValue -> {
+            SelectValueComposable(
+                currentGenerator = currentGenerator,
+                updateGeneratorValue = updateGeneratorValue,
+                currentGeneratorValue = currentGeneratorValue,
+                modifier = modifier
+            )
+        }
+
+        else -> { /* Nope */ }
+    }
+}
+
+@Composable
+private fun SelectValueComposable(
+    currentGenerator: TextGeneratorInfo<*>,
+    updateGeneratorValue: (value: TextGeneratorValue) -> Unit,
+    currentGeneratorValue: TextGeneratorValue.SelectValue,
+    modifier: Modifier,
+) {
+    if (currentGenerator.instance !is SelectTextGenerator) {
+        return
+    }
+
+    LazyRow(
+        modifier = modifier,
+        horizontalArrangement = Arrangement.spacedBy(8.dp)
+    ) {
+        itemsIndexed(currentGenerator.instance.available) { index, option ->
+            FilterChip(
+                onClick = {
+                    updateGeneratorValue(TextGeneratorValue.SelectValue(index))
+                },
+                label = { Text(option) },
+                selected = currentGeneratorValue.index == index,
+                leadingIcon = if (currentGeneratorValue.index == index) {
+                    {
+                        Icon(
+                            imageVector = Icons.Filled.Done,
+                            contentDescription = "Selected",
+                            modifier = Modifier.size(FilterChipDefaults.IconSize)
+                        )
+                    }
+                } else null,
+                colors = FilterChipDefaults.filterChipColors(
+                    containerColor = MaterialTheme.colorScheme.background
+                ),
+                border = null,
+                elevation = null
+            )
+        }
+    }
 }
 
 @Composable
