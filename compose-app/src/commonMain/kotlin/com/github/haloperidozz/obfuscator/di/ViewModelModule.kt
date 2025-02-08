@@ -17,9 +17,12 @@
 package com.github.haloperidozz.obfuscator.di
 
 import com.github.haloperidozz.obfuscator.ui.modelview.MainScreenViewModel
+import com.github.haloperidozz.obfuscator.ui.modelview.shared.SharedTextGeneratorHolder
 import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
 
 val viewModelModule = module {
-    viewModel { MainScreenViewModel(get()) }
+    single<SharedTextGeneratorHolder> { SharedTextGeneratorHolder(get()) }
+
+    viewModel<MainScreenViewModel> { MainScreenViewModel(get()) }
 }

@@ -17,34 +17,51 @@
 package com.github.haloperidozz.obfuscator.ui.modelview
 
 import androidx.lifecycle.ViewModel
-import com.github.haloperidozz.obfuscator.generator.model.TextGeneratorInfo
+import androidx.lifecycle.viewModelScope
 import com.github.haloperidozz.obfuscator.generator.model.TextGeneratorValue
 import com.github.haloperidozz.obfuscator.generator.type.FloatTextGenerator
 import com.github.haloperidozz.obfuscator.generator.type.SelectTextGenerator
 import com.github.haloperidozz.obfuscator.generator.type.SimpleTextGenerator
 import com.github.haloperidozz.obfuscator.generator.type.StringTextGenerator
-import com.github.haloperidozz.obfuscator.repository.TextGeneratorRepository
 import com.github.haloperidozz.obfuscator.ui.model.MainScreenUiState
+import com.github.haloperidozz.obfuscator.ui.modelview.shared.SharedTextGeneratorHolder
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 
 class MainScreenViewModel(
-    private val generatorRepository: TextGeneratorRepository
+    private val sharedTextGeneratorHolder: SharedTextGeneratorHolder
 ) : ViewModel() {
     private val initialState: MainScreenUiState by lazy {
-        val firstGenerator = generatorRepository.all().first()
+        val sharedUiState = sharedTextGeneratorHolder.uiState.value
+
         MainScreenUiState(
             currentText = "",
             currentGeneratedText = "",
-            currentGenerator = firstGenerator,
-            generatorValue = firstGenerator.defaultValue()
+            currentGenerator = sharedUiState.currentGenerator,
+            generatorValue = sharedUiState.generatorValue
         )
     }
 
     private val _uiState = MutableStateFlow(initialState)
     val uiState: StateFlow<MainScreenUiState> = _uiState.asStateFlow()
+
+    init {
+        viewModelScope.launch {
+            sharedTextGeneratorHolder.uiState.collect { sharedState ->
+                _uiState.update { currentState ->
+                    currentState.copy(
+                        currentGenerator = sharedState.currentGenerator,
+                        generatorValue = sharedState.generatorValue
+                    )
+                }
+
+                updateText()
+            }
+        }
+    }
 
     fun updateText(newText: String? = null) {
         _uiState.update { currentState ->
@@ -57,28 +74,17 @@ class MainScreenViewModel(
         }
     }
 
-    fun selectGenerator(generatorInfo: TextGeneratorInfo<*>) {
-        _uiState.update { currentState ->
-            currentState.copy(
-                currentGenerator = generatorInfo,
-                generatorValue = generatorInfo.defaultValue()
-            )
-        }
-        updateText()
-    }
-
     fun updateGeneratorValue(generatorValue: TextGeneratorValue) {
-        _uiState.update { currentState ->
-            currentState.copy(generatorValue = generatorValue)
-        }
-        updateText()
+        sharedTextGeneratorHolder.updateGeneratorValue(generatorValue)
     }
 
     private fun generateText(text: String): String {
-        val state = _uiState.value
-        val currentValue = state.generatorValue
+        val currentState = uiState.value
 
-        return when (val generator = state.currentGenerator.instance) {
+        val generatorInfo = currentState.currentGenerator
+        val currentValue = currentState.generatorValue
+
+        return when (val generator = generatorInfo.instance) {
             is FloatTextGenerator -> {
                 val value = (currentValue as? TextGeneratorValue.FloatValue)
                     ?: error("Expected a FloatValue for FloatTextGenerator")
