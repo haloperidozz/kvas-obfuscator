@@ -16,8 +16,10 @@
  */
 package com.github.haloperidozz.obfuscator.di
 
-import org.koin.core.KoinApplication
+import com.github.haloperidozz.obfuscator.ui.modelview.MainScreenViewModel
+import org.koin.core.module.dsl.viewModel
+import org.koin.dsl.module
 
-fun KoinApplication.commonModules() {
-    modules(repositoryModule, settingsModule, viewModelModule)
+val viewModelModule = module {
+    viewModel { MainScreenViewModel(get()) }
 }

@@ -14,10 +14,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package com.github.haloperidozz.obfuscator.di
+package com.github.haloperidozz.obfuscator.ui.model
 
-import org.koin.core.KoinApplication
+import com.github.haloperidozz.obfuscator.generator.model.TextGeneratorInfo
+import com.github.haloperidozz.obfuscator.generator.model.TextGeneratorValue
 
-fun KoinApplication.commonModules() {
-    modules(repositoryModule, settingsModule, viewModelModule)
-}
+data class MainScreenUiState(
+    val currentText: String,
+    val currentGeneratedText: String,
+    val currentGenerator: TextGeneratorInfo<*>,
+    val generatorValue: TextGeneratorValue?
+)
