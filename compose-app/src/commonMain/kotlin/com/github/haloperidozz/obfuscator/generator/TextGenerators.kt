@@ -66,6 +66,10 @@ enum class TextGenerators(
         category = TextGeneratorCategory.Typography,
         instance = CaseTextGenerator()
     ),
+    Pechenka(
+        category = TextGeneratorCategory.Shitposter,
+        instance = PechenkaTextGenerator()
+    ),
     Assembly(
         category = TextGeneratorCategory.Programming,
         instance = AssemblyTextGenerator().modify { generator, input ->
@@ -78,12 +82,26 @@ enum class TextGenerators(
             generator.generate(ISO9.Simple.transliterate(input), Unit)
         }
     ),
+    Bbubble(
+        category = TextGeneratorCategory.Shitposter,
+        instance = LetterReplaceTextGenerator("☆", "★", "✫"),
+    ),
+    Kitsu(
+        category = TextGeneratorCategory.Shitposter,
+        instance = LetterReplaceTextGenerator("🤍", "🖤", "🩶"),
+    ),
     Translit(
         category = TextGeneratorCategory.Script,
         instance = object : SimpleTextGenerator() {
             override fun generate(input: String): String {
                 return ISO9.Standard.transliterate(input)
             }
+        }
+    ),
+    Reversed(
+        category = TextGeneratorCategory.Other,
+        instance = object : SimpleTextGenerator() {
+            override fun generate(input: String): String = input.reversed()
         }
     ),
     @OptIn(ExperimentalEncodingApi::class)

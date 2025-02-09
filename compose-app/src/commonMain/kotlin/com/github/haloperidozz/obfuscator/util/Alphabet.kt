@@ -19,6 +19,17 @@ package com.github.haloperidozz.obfuscator.util
 object Alphabet {
     const val ENGLISH_UPPER = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
     const val ENGLISH_LOWER = "abcdefghijklmnopqrstuvwxyz"
+
     const val RUSSIAN_UPPER = "АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ"
     const val RUSSIAN_LOWER = "абвгдеёжзийклмнопрстуфхцчшщъыьэюя"
+
+    const val ENGLISH_VOWELS = "AEIOUYaeiouy"
+    const val RUSSIAN_VOWELS = "АЕЁИОУЫЭЮЯаеёиоуыэюя"
+    const val ALL_VOWELS = ENGLISH_VOWELS + RUSSIAN_VOWELS
+
+    const val RUSSIAN_CONSONANTS = "БВГДЖЗЙКЛМНПРСТФХЦЧШЩбвгджзйклмнпрстфхцчшщ"
+    const val ENGLISH_CONSONANTS = "BCDFGHJKLMNPQRSTVWXZbcdfghjklmnpqrstvwxz"
+    const val ALL_CONSONANTS = ENGLISH_CONSONANTS + RUSSIAN_CONSONANTS
+
+    const val RUSSIAN_SOFT_AND_HARD_SIGNS = "ЬьЪъ"
 }
