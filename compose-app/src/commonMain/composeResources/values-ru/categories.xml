@@ -1,0 +1,10 @@
+<resources>
+    <string name="category_shitposter">Щитпостеры</string>
+    <string name="category_cipher">Шифры</string>
+    <string name="category_programming">Языки программирования</string>
+    <string name="category_typography">Типографика</string>
+    <string name="category_script">Письменности</string>
+    <string name="category_converter">Конвертеры</string>
+    <string name="category_other">Другое</string>
+    <string name="category_unknown">Без категории</string>
+</resources>

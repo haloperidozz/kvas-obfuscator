@@ -1,0 +1,10 @@
+<resources>
+    <string name="category_shitposter">Shitposters</string>
+    <string name="category_cipher">Ciphers</string>
+    <string name="category_programming">Programming Languages</string>
+    <string name="category_typography">Typography</string>
+    <string name="category_script">Scripts</string>
+    <string name="category_converter">Converters</string>
+    <string name="category_other">Other</string>
+    <string name="category_unknown">Uncategorized</string>
+</resources>

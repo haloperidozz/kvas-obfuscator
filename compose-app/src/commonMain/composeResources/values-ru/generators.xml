@@ -1,0 +1,32 @@
+<resources>
+    <string name="text_generator_kvas">#квас</string>
+    <string name="text_generator_pechenka">#печенька</string>
+    <string name="text_generator_bbubble">bbubble [bbbuble]</string>
+    <string name="text_generator_zargo">z̸̛̺̞̀͆ẵ̶̧̪̞̆l̷͓̏g̶̛͓͐o̴̤̝̙͒̆</string>
+    <string name="text_generator_leet">1337</string>
+    <string name="text_generator_translit">ГОСТ 7.79-2000</string>
+    <string name="text_generator_wingdings">В. Д. Гастер [Wingdings]</string>
+    <string name="text_generator_atbash">Шифр Атбаш</string>
+    <string name="text_generator_morsecode">Азбука Морзе</string>
+    <string name="text_generator_glagolitic">Глаголица</string>
+    <string name="text_generator_sga">Стол зачаровывания [SGA]</string>
+    <string name="text_generator_phoenician">Финикийский</string>
+    <string name="text_generator_kitsu">кицу</string>
+    <string name="text_generator_brainfuck">Brainf**k</string>
+    <string name="text_generator_tortik">#тортик [HTML Entities]</string>
+    <string name="text_generator_rune">Руны</string>
+    <string name="text_generator_assembly">NASM [x86_64] [System V ABI]</string>
+    <string name="text_generator_chicken">Chicken</string>
+    <string name="text_generator_numeral">Система счисления</string>
+    <string name="text_generator_caesar">Шифр Цезаря</string>
+    <string name="text_generator_titlo">Буквотитло</string>
+    <string name="text_generator_lamushix">#ламушикс</string>
+    <string name="text_generator_venom">venom</string>
+    <string name="text_generator_case">Регистр</string>
+    <string name="text_generator_pasta">СЛАВА БОГУ... 🙏❤️</string>
+    <string name="text_generator_braille">Шрифт Брайля</string>
+    <string name="text_generator_locked_in_alien">Alien Language 👽</string>
+	<string name="text_generator_base64">Base64</string>
+    <string name="text_generator_hex_array">Массив символов</string>
+    <string name="text_generator_reversed">Перевернутый</string>
+</resources>

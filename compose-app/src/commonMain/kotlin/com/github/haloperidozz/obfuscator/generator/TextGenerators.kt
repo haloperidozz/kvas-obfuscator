@@ -24,74 +24,96 @@ import com.github.haloperidozz.obfuscator.generator.type.SelectTextGenerator
 import com.github.haloperidozz.obfuscator.generator.type.SimpleTextGenerator
 import com.github.haloperidozz.obfuscator.generator.type.StringTextGenerator
 import com.github.haloperidozz.obfuscator.util.ISO9
+import kvas_obfuscator.compose_app.generated.resources.*
+import kvas_obfuscator.compose_app.generated.resources.Res
+import kvas_obfuscator.compose_app.generated.resources.text_generator_atbash
+import kvas_obfuscator.compose_app.generated.resources.text_generator_caesar
+import kvas_obfuscator.compose_app.generated.resources.text_generator_kvas
+import org.jetbrains.compose.resources.StringResource
 import kotlin.io.encoding.ExperimentalEncodingApi
 
 enum class TextGenerators(
     val category: TextGeneratorCategory = TextGeneratorCategory.Unknown,
+    val resource: StringResource? = null,
     val instance: TextGenerator<*>
 ) {
     Kvas(
         category = TextGeneratorCategory.Shitposter,
+        resource = Res.string.text_generator_kvas,
         instance = KvasTextGenerator()
     ),
     CaesarCipher(
         category = TextGeneratorCategory.Cipher,
+        resource = Res.string.text_generator_caesar,
         instance = CaesarCipherTextGenerator()
     ),
     AtbashCipher(
         category = TextGeneratorCategory.Cipher,
+        resource = Res.string.text_generator_atbash,
         instance = AtbashCipherTextGenerator()
     ),
     Titlo(
         category = TextGeneratorCategory.Other,
+        resource = Res.string.text_generator_titlo,
         instance = TitloTextGenerator()
     ),
     Zalgo(
         category = TextGeneratorCategory.Other,
+        resource = Res.string.text_generator_zargo,
         instance = ZalgoTextGenerator()
     ),
     Numeral(
         category = TextGeneratorCategory.Converter,
+        resource = Res.string.text_generator_numeral,
         instance = NumeralTextGenerator()
     ),
     Tortik(
         category = TextGeneratorCategory.Shitposter,
+        resource = Res.string.text_generator_tortik,
         instance = HtmlEntitiesTextGenerator()
     ),
     SlavaBogu(
         category = TextGeneratorCategory.Other,
+        resource = Res.string.text_generator_pasta,
         instance = SlavaBoguTextGenerator()
     ),
     Case(
         category = TextGeneratorCategory.Typography,
+        resource = Res.string.text_generator_case,
         instance = CaseTextGenerator()
     ),
     Pechenka(
         category = TextGeneratorCategory.Shitposter,
+        resource = Res.string.text_generator_pechenka,
         instance = PechenkaTextGenerator()
     ),
     Assembly(
         category = TextGeneratorCategory.Programming,
+        resource = Res.string.text_generator_assembly,
         instance = AssemblyTextGenerator().modify { generator, input ->
             generator.generate(ISO9.Simple.transliterate(input), Unit)
         }
     ),
     Brainfuck(
         category = TextGeneratorCategory.Programming,
+        resource = Res.string.text_generator_brainfuck,
         instance = BrainfuckTextGenerator().modify { generator, input ->
             generator.generate(ISO9.Simple.transliterate(input), Unit)
         }
     ),
     Bbubble(
         category = TextGeneratorCategory.Shitposter,
+        resource = Res.string.text_generator_bbubble,
         instance = LetterReplaceTextGenerator("☆", "★", "✫"),
     ),
     Kitsu(
         category = TextGeneratorCategory.Shitposter,
+        resource = Res.string.text_generator_kitsu,
         instance = LetterReplaceTextGenerator("🤍", "🖤", "🩶"),
     ),
     Translit(
         category = TextGeneratorCategory.Script,
+        resource = Res.string.text_generator_translit,
         instance = object : SimpleTextGenerator() {
             override fun generate(input: String): String {
                 return ISO9.Standard.transliterate(input)
@@ -100,6 +122,7 @@ enum class TextGenerators(
     ),
     Reversed(
         category = TextGeneratorCategory.Other,
+        resource = Res.string.text_generator_reversed,
         instance = object : SimpleTextGenerator() {
             override fun generate(input: String): String = input.reversed()
         }
@@ -107,6 +130,7 @@ enum class TextGenerators(
     @OptIn(ExperimentalEncodingApi::class)
     Base64(
         category = TextGeneratorCategory.Converter,
+        resource = Res.string.text_generator_base64,
         instance = object : SimpleTextGenerator() {
             override fun generate(input: String): String {
                 return kotlin.io.encoding.Base64.encode(input.encodeToByteArray())
@@ -115,6 +139,7 @@ enum class TextGenerators(
     ),
     Venom(
         category = TextGeneratorCategory.Other,
+        resource = Res.string.text_generator_venom,
         instance = object : SimpleTextGenerator() {
             override fun generate(input: String): String {
                 if (input.isBlank()) return ""
@@ -127,6 +152,7 @@ enum class TextGenerators(
     ),
     HexArray(
         category = TextGeneratorCategory.Other,
+        resource = Res.string.text_generator_hex_array,
         instance = object : SimpleTextGenerator() {
             override fun generate(input: String): String = input.encodeToByteArray()
                 .map { "'\\x${it.toUByte().toString(16).padStart(2, '0')}'" }
@@ -136,6 +162,7 @@ enum class TextGenerators(
     ),
     Wingdings(
         category = TextGeneratorCategory.Script,
+        resource = Res.string.text_generator_wingdings,
         instance = TextReplacerTextGenerator(
             replacements = mapOf(
                 "а" to "🡪", "б" to "🡩", "в" to "🡫", "г" to "🡬", "д" to "🡭",
@@ -180,6 +207,7 @@ enum class TextGenerators(
     ),
     SGA(
         category = TextGeneratorCategory.Script,
+        resource = Res.string.text_generator_sga,
         instance = TextReplacerTextGenerator(
             replacements = mapOf(
                 "a" to "ᖋ", "b" to "ᕊ", "c" to "าํ", "d" to "੮", "e" to "ᒷ",
@@ -200,6 +228,7 @@ enum class TextGenerators(
     ),
     Glagolitic(
         category = TextGeneratorCategory.Script,
+        resource = Res.string.text_generator_glagolitic,
         instance = TextReplacerTextGenerator(
             replacements = mapOf(
                 "а" to "ⰰ", "б" to "ⰱ", "в" to "ⰲ", "г" to "ⰳ", "д" to "ⰴ",
@@ -221,6 +250,7 @@ enum class TextGenerators(
     ),
     Phoenician(
         category = TextGeneratorCategory.Script,
+        resource = Res.string.text_generator_phoenician,
         instance = TextReplacerTextGenerator(
             replacements = mapOf(
                 "А" to "𐤀", "Б" to "𐤁", "В" to "𐤅", "Г" to "𐤂", "Д" to "𐤃",
@@ -243,6 +273,7 @@ enum class TextGenerators(
     ),
     Rune(
         category = TextGeneratorCategory.Script,
+        resource = Res.string.text_generator_rune,
         instance = TextReplacerTextGenerator(
             replacements = mapOf(
                 "А" to "ᚨ", "Б" to "ᛒ", "В" to "ᚹ", "Г" to "ᚷ", "Д" to "ᛞ",
@@ -265,6 +296,7 @@ enum class TextGenerators(
     ),
     Leet(
         category = TextGeneratorCategory.Script,
+        resource = Res.string.text_generator_leet,
         instance = TextReplacerTextGenerator(
             replacements = mapOf(
                 "a" to "4", "а" to "4",
@@ -306,6 +338,7 @@ enum class TextGenerators(
     ),
     MorseCode(
         category = TextGeneratorCategory.Script,
+        resource = Res.string.text_generator_morsecode,
         instance = TextReplacerTextGenerator(
             replacements = mapOf(
                 "a" to ".-", "а" to ".-",
@@ -370,6 +403,7 @@ enum class TextGenerators(
     ),
     Lamushix(
         category = TextGeneratorCategory.Shitposter,
+        resource = Res.string.text_generator_lamushix,
         instance = TextReplacerTextGenerator(
             replacements = mapOf(
                 "а" to "_", "б" to "п", "в" to "ф", "г" to "к", "д" to "т",
@@ -385,6 +419,7 @@ enum class TextGenerators(
     ),
     Braille(
         category = TextGeneratorCategory.Script,
+        resource = Res.string.text_generator_braille,
         instance = TextReplacerTextGenerator(
             replacements = mapOf(
                 "а" to "⠁", "б" to "⠃", "в" to "⠺", "г" to "⠛", "д" to "⠙",
@@ -415,6 +450,7 @@ enum class TextGenerators(
     ),
     Alien(
         category = TextGeneratorCategory.Other,
+        resource = Res.string.text_generator_locked_in_alien,
         instance = TextReplacerTextGenerator(
             replacements = mapOf(
                 "a" to "⏃", "b" to "⏚", "c" to "☊", "d" to "⎅", "e" to "⟒",

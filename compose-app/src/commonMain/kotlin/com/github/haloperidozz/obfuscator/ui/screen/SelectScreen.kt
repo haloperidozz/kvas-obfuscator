@@ -133,7 +133,9 @@ private fun SelectTextGeneratorList(
         categorizedGenerators.forEach { (category, generatorList) ->
             item {
                 Text(
-                    text = category.name,
+                    text = category.resource?.let { resource ->
+                        stringResource(resource)
+                    } ?: category.name,
                     style = MaterialTheme.typography.titleSmall,
                     modifier = Modifier
                         .fillMaxWidth()
@@ -173,7 +175,9 @@ private fun SelectTextGeneratorItem(
     ListItem(
         headlineContent = {
             Text(
-                text = generator.name,
+                text = generator.resource?.let { resource ->
+                    stringResource(resource)
+                } ?: generator.name,
                 style = MaterialTheme.typography.titleMedium
             )
         },

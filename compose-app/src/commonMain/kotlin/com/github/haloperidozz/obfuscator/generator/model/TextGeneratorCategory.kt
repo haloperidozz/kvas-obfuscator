@@ -16,13 +16,20 @@
  */
 package com.github.haloperidozz.obfuscator.generator.model
 
-enum class TextGeneratorCategory {
-    Shitposter,
-    Cipher,
-    Programming,
-    Typography,
-    Script,
-    Converter,
-    Other,
-    Unknown,
+import kvas_obfuscator.compose_app.generated.resources.*
+import kvas_obfuscator.compose_app.generated.resources.Res
+import kvas_obfuscator.compose_app.generated.resources.category_cipher
+import kvas_obfuscator.compose_app.generated.resources.category_programming
+import kvas_obfuscator.compose_app.generated.resources.category_shitposter
+import org.jetbrains.compose.resources.StringResource
+
+enum class TextGeneratorCategory(val resource: StringResource? = null) {
+    Shitposter(resource = Res.string.category_shitposter),
+    Cipher(resource = Res.string.category_cipher),
+    Programming(resource = Res.string.category_programming),
+    Typography(resource = Res.string.category_typography),
+    Script(resource = Res.string.category_script),
+    Converter(resource = Res.string.category_converter),
+    Other(resource = Res.string.category_other),
+    Unknown(resource = Res.string.category_unknown),
 }

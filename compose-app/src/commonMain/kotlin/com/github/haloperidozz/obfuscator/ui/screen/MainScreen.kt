@@ -316,7 +316,11 @@ private fun BottomContent(
             shape = MaterialTheme.shapes.large,
             elevation = null
         ) {
-            Text(text = currentGenerator.name)
+            Text(
+                text = currentGenerator.resource?.let { resource ->
+                    stringResource(resource)
+                } ?: currentGenerator.name
+            )
         }
 
         Button(
