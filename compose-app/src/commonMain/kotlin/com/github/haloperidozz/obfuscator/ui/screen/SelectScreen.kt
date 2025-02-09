@@ -99,7 +99,10 @@ private fun SelectTextGeneratorList(
     onSelectGenerator: (TextGenerators) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val favoriteSet = remember(favoriteGenerators) { favoriteGenerators.toSet() }
+    val favoriteSet = remember(favoriteGenerators) {
+        favoriteGenerators.toSet()
+    }
+
     val categorizedGenerators = remember(generators, favoriteSet) {
         generators.filterNot { it in favoriteSet }.groupBy { it.category }
     }
@@ -110,9 +113,6 @@ private fun SelectTextGeneratorList(
             .padding(horizontal = 8.dp)
     ) {
         if (favoriteGenerators.isNotEmpty()) {
-            item {
-                SectionHeader(title = "Favorites")
-            }
             items(
                 items = favoriteGenerators,
                 key = { "favorite_${it.name}" }
@@ -129,7 +129,14 @@ private fun SelectTextGeneratorList(
 
         categorizedGenerators.forEach { (category, generatorList) ->
             item {
-                SectionHeader(title = category.name)
+                Text(
+                    text = category.name,
+                    style = MaterialTheme.typography.titleSmall,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 16.dp),
+                    textAlign = TextAlign.Center
+                )
             }
             items(
                 items = generatorList,
@@ -149,18 +156,6 @@ private fun SelectTextGeneratorList(
             Spacer(modifier = Modifier.height(8.dp))
         }
     }
-}
-
-@Composable
-private fun SectionHeader(title: String) {
-    Text(
-        text = title,
-        style = MaterialTheme.typography.titleSmall,
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(vertical = 16.dp),
-        textAlign = TextAlign.Center
-    )
 }
 
 @Composable
