@@ -35,6 +35,9 @@ import com.github.haloperidozz.obfuscator.generator.TextGenerators
 import com.github.haloperidozz.obfuscator.ui.viewmodel.SelectScreenViewModel
 import com.github.haloperidozz.obfuscator.util.ExternalEvent
 import com.github.haloperidozz.obfuscator.util.LocalPlatform
+import kvas_obfuscator.compose_app.generated.resources.Res
+import kvas_obfuscator.compose_app.generated.resources.select
+import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
@@ -78,7 +81,7 @@ fun SelectScreen(
 @Composable
 fun SelectScreenTopBar(onBackClicked: () -> Unit) {
     TopAppBar(
-        title = { Text(text = "Select") },
+        title = { Text(text = stringResource(Res.string.select)) },
         navigationIcon = {
             IconButton(onClick = onBackClicked) {
                 Icon(

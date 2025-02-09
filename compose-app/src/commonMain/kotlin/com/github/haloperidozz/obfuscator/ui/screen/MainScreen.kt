@@ -44,6 +44,11 @@ import com.github.haloperidozz.obfuscator.ui.viewmodel.MainScreenViewModel
 import com.github.haloperidozz.obfuscator.util.LocalPlatform
 import com.github.haloperidozz.obfuscator.util.PlatformType
 import kotlinx.coroutines.launch
+import kvas_obfuscator.compose_app.generated.resources.Res
+import kvas_obfuscator.compose_app.generated.resources.copied
+import kvas_obfuscator.compose_app.generated.resources.enter_special_text_here
+import kvas_obfuscator.compose_app.generated.resources.enter_text_here
+import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
@@ -134,7 +139,9 @@ private fun InputTextField(
     CustomTextField(
         value = currentText,
         onValueChange = onTextChanged,
-        placeholder = { Text(text = "Enter Text Here") },
+        placeholder = {
+            Text(text = stringResource(Res.string.enter_text_here))
+        },
         modifier = modifier
     )
 }
@@ -160,7 +167,7 @@ private fun ResultTextField(
         TooltipBox(
             positionProvider = positionProvider,
             tooltip = {
-                PlainTooltip { Text(text = "Copied") }
+                PlainTooltip { Text(text = stringResource(Res.string.copied)) }
             },
             state = tooltipState,
             focusable = false,
@@ -225,7 +232,9 @@ fun TextGeneratorValueEditor(
                 onValueChange = { value ->
                     updateGeneratorValue(TextGeneratorValue.StringValue(value))
                 },
-                placeholder = { Text(text = "Special Text Here") },
+                placeholder = {
+                    Text(text = stringResource(Res.string.enter_special_text_here))
+                },
                 singleLine = true,
                 modifier = modifier.fillMaxWidth()
             )

@@ -32,7 +32,9 @@ import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kvas_obfuscator.compose_app.generated.resources.Res
 import kvas_obfuscator.compose_app.generated.resources.app_icon
+import kvas_obfuscator.compose_app.generated.resources.app_name
 import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.KoinApplication
 
 fun main() = application {
@@ -46,7 +48,7 @@ fun main() = application {
 
     Window(
         onCloseRequest = ::exitApplication,
-        title = "kvas-obfuscator",
+        title = stringResource(Res.string.app_name),
         onKeyEvent = {
             if (it.type == KeyEventType.KeyUp && it.key == Key.Escape) {
                 externalEvents.tryEmit(ExternalEvent.Back)
