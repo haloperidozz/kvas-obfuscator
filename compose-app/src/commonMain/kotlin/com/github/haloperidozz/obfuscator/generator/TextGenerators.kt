@@ -30,6 +30,10 @@ enum class TextGenerators(
     val category: TextGeneratorCategory = TextGeneratorCategory.Unknown,
     val instance: TextGenerator<*>
 ) {
+    Kvas(
+        category = TextGeneratorCategory.Shitposter,
+        instance = KvasTextGenerator()
+    ),
     CaesarCipher(
         category = TextGeneratorCategory.Cipher,
         instance = CaesarCipherTextGenerator()
@@ -45,6 +49,18 @@ enum class TextGenerators(
     Zalgo(
         category = TextGeneratorCategory.Other,
         instance = ZalgoTextGenerator()
+    ),
+    Numeral(
+        category = TextGeneratorCategory.Converter,
+        instance = NumeralTextGenerator()
+    ),
+    Tortik(
+        category = TextGeneratorCategory.Shitposter,
+        instance = HtmlEntitiesTextGenerator()
+    ),
+    SlavaBogu(
+        category = TextGeneratorCategory.Other,
+        instance = SlavaBoguTextGenerator()
     ),
     Assembly(
         category = TextGeneratorCategory.Programming,
@@ -73,6 +89,27 @@ enum class TextGenerators(
             override fun generate(input: String): String {
                 return kotlin.io.encoding.Base64.encode(input.encodeToByteArray())
             }
+        }
+    ),
+    Venom(
+        category = TextGeneratorCategory.Other,
+        instance = object : SimpleTextGenerator() {
+            override fun generate(input: String): String {
+                if (input.isBlank()) return ""
+
+                return input.split(" ").joinToString(" ") { word ->
+                    if (word.length <= 2) "venom" else "ven" + word.drop(word.length / 2)
+                }
+            }
+        }
+    ),
+    HexArray(
+        category = TextGeneratorCategory.Other,
+        instance = object : SimpleTextGenerator() {
+            override fun generate(input: String): String = input.encodeToByteArray()
+                .map { "'\\x${it.toUByte().toString(16).padStart(2, '0')}'" }
+                .plus("'\\0'")
+                .joinToString(", ", "{", "}")
         }
     );
 
