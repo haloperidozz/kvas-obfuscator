@@ -19,7 +19,7 @@ package com.github.haloperidozz.obfuscator.ui.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.github.haloperidozz.obfuscator.data.settings.SettingsStorage
-import com.github.haloperidozz.obfuscator.generator.model.TextGeneratorInfo
+import com.github.haloperidozz.obfuscator.generator.TextGenerators
 import com.github.haloperidozz.obfuscator.repository.TextGeneratorRepository
 import com.github.haloperidozz.obfuscator.ui.model.SelectScreenUiState
 import com.github.haloperidozz.obfuscator.ui.viewmodel.shared.SharedTextGeneratorHolder
@@ -55,7 +55,7 @@ class SelectScreenViewModel(
                 _uiState.update { currentState ->
                     val generators = currentState.generators
                     currentState.copy(
-                        favoriteGenerators = generators.filter { it.id in favoriteIds }
+                        favoriteGenerators = generators.filter { it.name in favoriteIds }
                     )
                 }
             }
@@ -72,7 +72,7 @@ class SelectScreenViewModel(
         }
     }
 
-    fun toggleFavorite(generator: TextGeneratorInfo<*>) {
+    fun toggleFavorite(generator: TextGenerators) {
         val updatedFavorites = _uiState.value.favoriteGenerators.toMutableList()
 
         updatedFavorites.apply {
@@ -86,13 +86,13 @@ class SelectScreenViewModel(
         viewModelScope.launch {
             settingsStorage.setItem(
                 key = FAVORITE_SETTINGS_KEY,
-                value = updatedFavorites.joinToString("|") { it.id }
+                value = updatedFavorites.joinToString("|") { it.name }
             )
         }
 
     }
 
-    fun selectGenerator(generator: TextGeneratorInfo<*>) {
+    fun selectGenerator(generator: TextGenerators) {
         sharedTextGeneratorHolder.selectGenerator(generator)
     }
 

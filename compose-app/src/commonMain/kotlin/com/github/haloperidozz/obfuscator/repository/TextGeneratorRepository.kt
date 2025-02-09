@@ -16,15 +16,15 @@
  */
 package com.github.haloperidozz.obfuscator.repository
 
+import com.github.haloperidozz.obfuscator.generator.TextGenerators
 import com.github.haloperidozz.obfuscator.generator.model.TextGeneratorCategory
-import com.github.haloperidozz.obfuscator.generator.model.TextGeneratorInfo
 
 interface TextGeneratorRepository {
-    operator fun get(id: String): TextGeneratorInfo<*>?
+    operator fun get(id: String): TextGenerators?
 
     operator fun contains(id: String): Boolean
 
-    fun all(): List<TextGeneratorInfo<*>>
+    fun all(): List<TextGenerators>
 
-    fun byCategory(category: TextGeneratorCategory): List<TextGeneratorInfo<*>>
+    fun byCategory(category: TextGeneratorCategory): List<TextGenerators>
 }

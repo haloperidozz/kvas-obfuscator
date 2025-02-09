@@ -16,10 +16,10 @@
  */
 package com.github.haloperidozz.obfuscator.ui.model
 
-import com.github.haloperidozz.obfuscator.generator.model.TextGeneratorInfo
+import com.github.haloperidozz.obfuscator.generator.TextGenerators
 
 data class SelectScreenUiState(
-    val generators: List<TextGeneratorInfo<*>>,
-    val favoriteGenerators: List<TextGeneratorInfo<*>>,
-    val currentGenerator: TextGeneratorInfo<*>
+    val generators: List<TextGenerators>,
+    val favoriteGenerators: List<TextGenerators>,
+    val currentGenerator: TextGenerators
 )

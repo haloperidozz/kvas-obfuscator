@@ -81,28 +81,35 @@ class MainScreenViewModel(
     private fun generateText(text: String): String {
         val currentState = uiState.value
 
-        val generatorInfo = currentState.currentGenerator
+        val currentGenerator = currentState.currentGenerator
         val currentValue = currentState.generatorValue
 
-        return when (val generator = generatorInfo.instance) {
+        return when (val generator = currentGenerator.instance) {
             is FloatTextGenerator -> {
                 val value = (currentValue as? TextGeneratorValue.FloatValue)
                     ?: error("Expected a FloatValue for FloatTextGenerator")
+
                 generator.doGenerate(text, value.value)
             }
+
             is SelectTextGenerator -> {
                 val value = (currentValue as? TextGeneratorValue.SelectValue)
                     ?: error("Expected a SelectValue for SelectTextGenerator")
+
                 generator.generate(text, value.index)
             }
+
             is SimpleTextGenerator -> {
                 generator.generate(text, Unit)
             }
+
             is StringTextGenerator -> {
                 val value = (currentValue as? TextGeneratorValue.StringValue)
                     ?: error("Expected a StringValue for StringTextGenerator")
+
                 generator.generate(text, value.value)
             }
+
             else -> ""
         }
     }

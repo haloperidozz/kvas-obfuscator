@@ -16,12 +16,12 @@
  */
 package com.github.haloperidozz.obfuscator.ui.model
 
-import com.github.haloperidozz.obfuscator.generator.model.TextGeneratorInfo
+import com.github.haloperidozz.obfuscator.generator.TextGenerators
 import com.github.haloperidozz.obfuscator.generator.model.TextGeneratorValue
 
 data class MainScreenUiState(
     val currentText: String,
     val currentGeneratedText: String,
-    val currentGenerator: TextGeneratorInfo<*>,
+    val currentGenerator: TextGenerators,
     val generatorValue: TextGeneratorValue?
 )

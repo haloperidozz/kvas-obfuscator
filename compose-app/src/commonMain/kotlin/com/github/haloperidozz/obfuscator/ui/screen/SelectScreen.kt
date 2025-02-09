@@ -31,7 +31,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import com.github.haloperidozz.obfuscator.generator.model.TextGeneratorInfo
+import com.github.haloperidozz.obfuscator.generator.TextGenerators
 import com.github.haloperidozz.obfuscator.ui.viewmodel.SelectScreenViewModel
 import com.github.haloperidozz.obfuscator.util.ExternalEvent
 import com.github.haloperidozz.obfuscator.util.LocalPlatform
@@ -92,11 +92,11 @@ fun SelectScreenTopBar(onBackClicked: () -> Unit) {
 
 @Composable
 private fun SelectTextGeneratorList(
-    generators: List<TextGeneratorInfo<*>>,
-    favoriteGenerators: List<TextGeneratorInfo<*>>,
-    currentGenerator: TextGeneratorInfo<*>,
-    onToggleFavorite: (TextGeneratorInfo<*>) -> Unit,
-    onSelectGenerator: (TextGeneratorInfo<*>) -> Unit,
+    generators: List<TextGenerators>,
+    favoriteGenerators: List<TextGenerators>,
+    currentGenerator: TextGenerators,
+    onToggleFavorite: (TextGenerators) -> Unit,
+    onSelectGenerator: (TextGenerators) -> Unit,
     modifier: Modifier = Modifier
 ) {
     val favoriteSet = remember(favoriteGenerators) { favoriteGenerators.toSet() }
@@ -115,11 +115,11 @@ private fun SelectTextGeneratorList(
             }
             items(
                 items = favoriteGenerators,
-                key = { "favorite_${it.id}" }
+                key = { "favorite_${it.name}" }
             ) { generator ->
                 SelectTextGeneratorItem(
                     generator = generator,
-                    isSelected = generator.id == currentGenerator.id,
+                    isSelected = generator == currentGenerator,
                     isFavorite = true,
                     onFavoriteClick = { onToggleFavorite(generator) },
                     onClick = { onSelectGenerator(generator) }
@@ -133,11 +133,11 @@ private fun SelectTextGeneratorList(
             }
             items(
                 items = generatorList,
-                key = { "category_${it.id}" }
+                key = { "category_${it.name}" }
             ) { generator ->
                 SelectTextGeneratorItem(
                     generator = generator,
-                    isSelected = generator.id == currentGenerator.id,
+                    isSelected = generator == currentGenerator,
                     isFavorite = false,
                     onFavoriteClick = { onToggleFavorite(generator) },
                     onClick = { onSelectGenerator(generator) }
@@ -165,7 +165,7 @@ private fun SectionHeader(title: String) {
 
 @Composable
 private fun SelectTextGeneratorItem(
-    generator: TextGeneratorInfo<*>,
+    generator: TextGenerators,
     isSelected: Boolean,
     isFavorite: Boolean,
     onFavoriteClick: () -> Unit,
@@ -175,7 +175,7 @@ private fun SelectTextGeneratorItem(
     ListItem(
         headlineContent = {
             Text(
-                text = generator.id,
+                text = generator.name,
                 style = MaterialTheme.typography.titleMedium
             )
         },

@@ -16,7 +16,7 @@
  */
 package com.github.haloperidozz.obfuscator.ui.viewmodel.shared
 
-import com.github.haloperidozz.obfuscator.generator.model.TextGeneratorInfo
+import com.github.haloperidozz.obfuscator.generator.TextGenerators
 import com.github.haloperidozz.obfuscator.generator.model.TextGeneratorValue
 import com.github.haloperidozz.obfuscator.repository.TextGeneratorRepository
 import com.github.haloperidozz.obfuscator.ui.model.SharedTextGeneratorUiState
@@ -40,7 +40,7 @@ class SharedTextGeneratorHolder(
     private val _uiState = MutableStateFlow(initialState)
     val uiState: StateFlow<SharedTextGeneratorUiState> = _uiState.asStateFlow()
 
-    fun selectGenerator(generatorInfo: TextGeneratorInfo<*>) {
+    fun selectGenerator(generatorInfo: TextGenerators) {
         _uiState.update { currentState ->
             currentState.copy(
                 currentGenerator = generatorInfo,

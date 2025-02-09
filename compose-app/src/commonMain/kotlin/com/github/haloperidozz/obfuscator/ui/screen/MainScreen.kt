@@ -36,7 +36,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.unit.dp
-import com.github.haloperidozz.obfuscator.generator.model.TextGeneratorInfo
+import com.github.haloperidozz.obfuscator.generator.TextGenerators
 import com.github.haloperidozz.obfuscator.generator.model.TextGeneratorValue
 import com.github.haloperidozz.obfuscator.generator.type.FloatTextGenerator
 import com.github.haloperidozz.obfuscator.generator.type.SelectTextGenerator
@@ -198,7 +198,7 @@ private fun ResultTextField(
 
 @Composable
 fun TextGeneratorValueEditor(
-    currentGenerator: TextGeneratorInfo<*>,
+    currentGenerator: TextGenerators,
     updateGeneratorValue: (value: TextGeneratorValue) -> Unit,
     currentGeneratorValue: TextGeneratorValue?,
     modifier: Modifier = Modifier
@@ -246,7 +246,7 @@ fun TextGeneratorValueEditor(
 
 @Composable
 private fun SelectValueComposable(
-    currentGenerator: TextGeneratorInfo<*>,
+    currentGenerator: TextGenerators,
     updateGeneratorValue: (value: TextGeneratorValue) -> Unit,
     currentGeneratorValue: TextGeneratorValue.SelectValue,
     modifier: Modifier,
@@ -288,7 +288,7 @@ private fun SelectValueComposable(
 @Composable
 private fun BottomContent(
     switchScreen: (Screen) -> Unit,
-    currentGenerator: TextGeneratorInfo<*>,
+    currentGenerator: TextGenerators,
     modifier: Modifier = Modifier
 ) {
     Row(
@@ -307,7 +307,7 @@ private fun BottomContent(
             shape = MaterialTheme.shapes.large,
             elevation = null
         ) {
-            Text(text = currentGenerator.id)
+            Text(text = currentGenerator.name)
         }
 
         Button(
