@@ -18,12 +18,11 @@ package com.github.haloperidozz.obfuscator.generator.impl
 
 import com.github.haloperidozz.obfuscator.generator.type.FloatTextGenerator
 import com.github.haloperidozz.obfuscator.util.toUnicodeCharString
+import com.github.haloperidozz.obfuscator.util.transformEach
 
 class ZalgoTextGenerator : FloatTextGenerator(range = 1.0f..100.0f) {
     override fun doGenerate(input: String, value: Float): String {
-        return input.map { char ->
-            char + generateMarks(value.toInt())
-        }.joinToString("")
+        return input.transformEach { char -> char + generateMarks(value.toInt()) }
     }
 
     private fun generateMarks(maxHeight: Int) = buildString {

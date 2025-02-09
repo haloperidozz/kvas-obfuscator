@@ -18,12 +18,13 @@ package com.github.haloperidozz.obfuscator.generator.impl
 
 import com.github.haloperidozz.obfuscator.generator.type.SelectTextGenerator
 import com.github.haloperidozz.obfuscator.util.Alphabet
+import com.github.haloperidozz.obfuscator.util.transformEach
 
 class CaesarCipherTextGenerator : SelectTextGenerator(
     Alphabet.RUSSIAN_LOWER.indices.map { index -> "ROT$index" }
 ) {
     override fun generate(input: String, selected: String, index: Int): String {
-        return input.map { char -> shiftChar(char, index) }.joinToString("")
+        return input.transformEach { char -> shiftChar(char, index) }
     }
 
     private fun shiftChar(char: Char, shift: Int) = when (char) {

@@ -17,17 +17,18 @@
 package com.github.haloperidozz.obfuscator.generator.impl
 
 import com.github.haloperidozz.obfuscator.generator.type.FloatTextGenerator
+import com.github.haloperidozz.obfuscator.util.transformEach
 import kotlin.random.Random
 
 class KvasTextGenerator : FloatTextGenerator() {
     override fun doGenerate(input: String, value: Float): String {
-        return input.map { char ->
+        return input.transformEach { char ->
             if (Random.nextFloat() > value) {
                 char
             } else {
                 KVAS_KEYBOARD_MAPPING[char]?.random() ?: char
             }
-        }.joinToString("")
+        }
     }
 
     companion object {

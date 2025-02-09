@@ -18,10 +18,11 @@ package com.github.haloperidozz.obfuscator.generator.impl
 
 import com.github.haloperidozz.obfuscator.generator.type.SimpleTextGenerator
 import com.github.haloperidozz.obfuscator.util.Alphabet
+import com.github.haloperidozz.obfuscator.util.transformEach
 
 class AtbashCipherTextGenerator : SimpleTextGenerator() {
     override fun generate(input: String): String {
-        return input.map { char -> reverseChar(char) }.joinToString("")
+        return input.transformEach { char -> reverseChar(char) }
     }
 
     private fun reverseChar(char: Char) = when (char) {

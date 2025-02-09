@@ -17,10 +17,11 @@
 package com.github.haloperidozz.obfuscator.generator.impl
 
 import com.github.haloperidozz.obfuscator.generator.type.SimpleTextGenerator
+import com.github.haloperidozz.obfuscator.util.transformEach
 
 class HtmlEntitiesTextGenerator : SimpleTextGenerator() {
     override fun generate(input: String): String {
-        return input.map { it.toHtmlEntity() }.joinToString("")
+        return input.transformEach { it.toHtmlEntity() }
     }
 
     private fun Char.toHtmlEntity(): String {
