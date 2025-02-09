@@ -30,6 +30,9 @@ import com.github.haloperidozz.obfuscator.util.LocalPlatformProvider
 import com.github.haloperidozz.obfuscator.util.Platform
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.MutableSharedFlow
+import kvas_obfuscator.compose_app.generated.resources.Res
+import kvas_obfuscator.compose_app.generated.resources.app_icon
+import org.jetbrains.compose.resources.painterResource
 import org.koin.compose.KoinApplication
 
 fun main() = application {
@@ -50,6 +53,7 @@ fun main() = application {
             }
             false
         },
+        icon = painterResource(Res.drawable.app_icon)
     ) {
         LocalPlatformProvider(remember { Platform(window, externalEvents) }) {
             KoinApplication(application = { commonModules() }) {
