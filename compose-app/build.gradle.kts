@@ -21,12 +21,12 @@ kotlin {
     
     @OptIn(ExperimentalWasmDsl::class)
     wasmJs {
-        moduleName = "composeApp"
+        moduleName = "kvas-obfusactor"
         browser {
             val rootDirPath = project.rootDir.path
             val projectDirPath = project.projectDir.path
             commonWebpackConfig {
-                outputFileName = "composeApp.js"
+                outputFileName = "kvas-obfusactor.js"
                 devServer = (devServer ?: KotlinWebpackConfig.DevServer()).apply {
                     static = (static ?: mutableListOf()).apply {
                         // Serve sources to debug inside browser
@@ -94,7 +94,7 @@ android {
     }
     buildTypes {
         getByName("release") {
-            isMinifyEnabled = false
+            isMinifyEnabled = true
         }
     }
     compileOptions {
@@ -107,10 +107,26 @@ compose.desktop {
     application {
         mainClass = "com.github.haloperidozz.obfuscator.MainKt"
 
+        buildTypes.release.proguard {
+            configurationFiles.from(project.file("desktop/proguard-rules.pro"))
+        }
+
         nativeDistributions {
-            targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
-            packageName = "com.github.haloperidozz.obfuscator"
+            targetFormats(TargetFormat.Msi, TargetFormat.Deb)
+
+            packageName = "kvas-obfusactor"
             packageVersion = "1.0.0"
+
+            linux {
+                iconFile = project.file("desktop/app-icon.png")
+            }
+
+            windows {
+                menuGroup = "haloperidozz"
+                upgradeUuid = "bfec101b-c560-46cd-b218-cc261b079924"
+                shortcut = true
+                iconFile = project.file("desktop/app-icon.ico")
+            }
         }
     }
 }
