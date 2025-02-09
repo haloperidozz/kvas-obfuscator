@@ -62,6 +62,10 @@ enum class TextGenerators(
         category = TextGeneratorCategory.Other,
         instance = SlavaBoguTextGenerator()
     ),
+    Case(
+        category = TextGeneratorCategory.Typography,
+        instance = CaseTextGenerator()
+    ),
     Assembly(
         category = TextGeneratorCategory.Programming,
         instance = AssemblyTextGenerator().modify { generator, input ->
