@@ -106,7 +106,5 @@ jobs:
         uses: ncipollo/release-action@v1
         with:
           tag: ${{ github.ref_name }}
-          name: Release ${{ github.ref_name }}
-          files: |
-            artifacts/kvas-obfuscator-${{ github.ref_name }}.deb
-            artifacts/kvas-obfuscator-${{ github.ref_name }}.msi
+          name: Release ${{ github.ref_name }}'
+          artifacts: "artifacts/*.*"
