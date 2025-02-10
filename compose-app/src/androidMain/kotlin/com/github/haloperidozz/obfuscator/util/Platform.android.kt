@@ -27,7 +27,7 @@ actual class Platform(
     actual val type: PlatformType = PlatformType.Android
 
     actual fun saveToFile(text: String, defaultFileName: String) {
-        // TODO?
+        // TODO: Need to try to implement this in the next version
     }
 
     actual fun share(text: String) {

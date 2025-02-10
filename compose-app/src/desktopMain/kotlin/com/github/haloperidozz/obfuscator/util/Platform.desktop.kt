@@ -49,6 +49,6 @@ actual class Platform(
     }
 
     actual fun share(text: String) {
-        // No-op: Share functionality is not supported on desktop
+        // No-op: The share function is not supported by the platform
     }
 }

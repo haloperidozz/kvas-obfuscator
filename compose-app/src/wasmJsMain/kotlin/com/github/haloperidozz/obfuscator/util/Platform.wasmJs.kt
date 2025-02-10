@@ -24,10 +24,10 @@ actual class Platform {
     actual val externalEvents: Flow<ExternalEvent> = emptyFlow()
 
     actual fun saveToFile(text: String, defaultFileName: String) {
-        // TODO?
+        // TODO: Need to try to implement this in the next version
     }
 
     actual fun share(text: String) {
-        // No-op: Share functionality is not supported on web
+        // No-op: The share function is not supported by the platform (or is it?)
     }
 }

@@ -16,6 +16,7 @@
  */
 package com.github.haloperidozz.obfuscator.util
 
+// TODO: Perhaps this class needs to be improved and optimized?
 class TextReplacer(
     replacements: Map<String, String>,
     private val caseSensitive: Boolean = true,
