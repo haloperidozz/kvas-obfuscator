@@ -1,0 +1,130 @@
+name: Build & Release
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  build-ubuntu:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+  
+      # Configure Gradle for optimal use in GitHub Actions, including caching of downloaded dependencies.
+      # See: https://github.com/gradle/actions/blob/main/setup-gradle/README.md
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@af1da67850ed9a4cedd57bfd976089dd991e2582 # v4.0.0
+  
+      # Execute the Gradle tasks
+      - name: Run packageReleaseDistributionForCurrentOS task
+        run: ./gradlew packageReleaseDistributionForCurrentOS
+      - name: Run wasmJsBrowserDistribution task
+        run: ./gradlew wasmJsBrowserDistribution
+
+      # Locate the produced .deb file and copy it to a fixed name so it can be used later
+      - name: Find and copy .deb file
+        run: |
+          # Look for the first .deb file in the expected folder
+          DEB_FILE=$(ls compose-app/build/compose/binaries/main-release/deb/*.deb | head -n 1)
+          echo "Found .deb file: $DEB_FILE"
+          cp "$DEB_FILE" compose.deb
+
+      # Replace the files in the "web" branch with the production executable files
+      - name: Update web branch with production executable files
+        env:
+          # Extract the tag name from GITHUB_REF (e.g. refs/tags/v1.2.3 → v1.2.3)
+          TAG_NAME: ${GITHUB_REF#refs/tags/}
+        run: |
+          echo "Updating web branch with tag: $TAG_NAME"
+          # Configure Git (so that commits made by the action have an author)
+          git config --global user.name "GitHub Actions"
+          git config --global user.email "actions@github.com"
+          # Fetch and checkout the web branch. If it doesn’t exist, create an orphan branch.
+          git fetch origin web || true
+          git checkout -B web origin/web || git checkout --orphan web
+          # Replace the current content with the production files from the gradle build.
+          # (rsync with --delete ensures that files removed from productionExecutable/ are also removed in web.)
+          rsync -a --delete compose-app/build/dist/wasmJs/productionExecutable/ .
+          git add -A
+          # Commit with the tag name. If there are no changes, don’t fail.
+          git commit -m "$TAG_NAME" || echo "No changes to commit"
+          # Push the changes to the web branch (force push to replace its content)
+          git push origin web --force
+
+      # Upload the .deb file as an artifact for later use in the release
+      - name: Upload Debian artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: deb
+          path: compose.deb
+
+  build-windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+  
+      # Configure Gradle for optimal use in GitHub Actions, including caching of downloaded dependencies.
+      # See: https://github.com/gradle/actions/blob/main/setup-gradle/README.md
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@af1da67850ed9a4cedd57bfd976089dd991e2582 # v4.0.0
+  
+      # Execute the Gradle tasks
+      - name: Run packageReleaseDistributionForCurrentOS task
+        run: ./gradlew packageReleaseDistributionForCurrentOS
+
+      # Find the produced .msi file and copy it to a fixed name (msi.msi)
+      - name: Find and copy .msi file
+        shell: pwsh
+        run: |
+          $msiFile = Get-ChildItem -Path "compose-app\build\compose\binaries\main-release\msi\*.msi" | Select-Object -First 1
+          if (-not $msiFile) {
+              Write-Error "No MSI file found"
+              exit 1
+          }
+          Write-Host "Found MSI file: $($msiFile.FullName)"
+          Copy-Item $msiFile.FullName -Destination "msi.msi"
+
+      # Upload the .msi file as an artifact for later use in the release
+      - name: Upload MSI artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: msi
+          path: msi.msi
+
+  create-release:
+    name: Create GitHub Release with Artifacts
+    needs: [build-ubuntu, build-windows]
+    runs-on: ubuntu-latest
+    steps:
+      # Download the Debian artifact from the Ubuntu build job
+      - name: Download Debian artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: deb
+          path: artifacts
+      # Download the MSI artifact from the Windows build job
+      - name: Download MSI artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: msi
+          path: artifacts
+
+      # Create a GitHub release using the tag that triggered the workflow and attach the artifacts.
+      - name: Create Release
+        uses: ncipollo/release-action@v1
+        with:
+          tag: ${{ github.ref_name }}
+          name: Release ${{ github.ref_name }}
+          files: |
+            artifacts/compose.deb
+            artifacts/msi.msi
