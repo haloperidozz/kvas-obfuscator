@@ -4,4 +4,6 @@
     <string name="enter_text_here">Введите текст</string>
     <string name="enter_special_text_here">Дополнительный текст</string>
     <string name="select">Выберите</string>
+    <string name="info_version">Версия</string>
+    <string name="info_github">GitHub</string>
 </resources>

@@ -4,4 +4,6 @@
     <string name="enter_text_here">Enter Text Here</string>
     <string name="enter_special_text_here">Enter Special Text Here</string>
     <string name="select">Select</string>
+    <string name="info_version">Version</string>
+    <string name="info_github">GitHub</string>
 </resources>
