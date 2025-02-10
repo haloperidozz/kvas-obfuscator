@@ -27,20 +27,28 @@ jobs:
       - name: Run wasmJsBrowserDistribution task
         run: ./gradlew wasmJsBrowserDistribution
 
-      # Replace the files in the "web" branch with the production executable files
+      - name: Backup production files
+        run: |
+          mkdir -p /tmp/productionExecutable
+          cp -R compose-app/build/dist/wasmJs/productionExecutable/* /tmp/productionExecutable/
+
       - name: Update web branch with production executable files
         run: |
-          # Configure Git (so that commits made by the action have an author)
-          git config --global user.name "GitHub Actions"
-          git config --global user.email "actions@github.com"
-          # Fetch and checkout the web branch. If it doesn’t exist, create an orphan branch.
+          # Configure Git identity
+          git config user.email "github-actions@github.com"
+          git config user.name "GitHub Actions"
+
+          # Fetch and check out (or create) the web branch
           git fetch origin web || true
-          git checkout -B web origin/web || git checkout --orphan web
-          # Replace the current content with the production files from the gradle build.
-          # (The || true here ignores any nonzero exit code from rsync.)
-          rsync -a --delete compose-app/build/dist/wasmJs/productionExecutable/ . || true
-          git add -A
-          # Commit with the tag name. If there are no changes, don’t fail.
-          git commit -m "${{ github.ref_name }}" || echo "No changes to commit"
-          # Push the changes to the web branch (force push to replace its content)
-          git push origin web --force
+          git checkout -B web
+
+          # Remove all files (except .git) to ensure a clean branch
+          find . -maxdepth 1 ! -name '.git' ! -name '.' -exec rm -rf {} +
+
+          # Copy the production files from the temporary backup folder into the repository root
+          cp -R /tmp/productionExecutable/* .
+
+          # Stage, commit, and force-push the changes using the tag name as the commit message
+          git add .
+          git commit -m "${{ github.ref_name }}"
+          git push -f origin web
