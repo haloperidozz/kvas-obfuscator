@@ -1,3 +1,7 @@
+import com.squareup.kotlinpoet.FileSpec
+import com.squareup.kotlinpoet.KModifier
+import com.squareup.kotlinpoet.PropertySpec
+import com.squareup.kotlinpoet.TypeSpec
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
@@ -8,6 +12,45 @@ plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.composeCompiler)
+}
+
+buildscript {
+    dependencies {
+        classpath(libs.kotlinpoet)
+    }
+}
+
+fun buildConfigSourceDirectory() =
+    layout.buildDirectory.dir("generated/buildconfig/kotlin")
+
+val generateBuildConfig: TaskProvider<*> by tasks.registering {
+    val packageName = "com.github.haloperidozz.obfuscator.buildconfig"
+    val outputDirectory = buildConfigSourceDirectory()
+
+    outputs.dir(outputDirectory)
+
+    doLast {
+        val buildConfig = TypeSpec.objectBuilder("BuildConfig")
+            .addProperty(
+                PropertySpec.builder("VERSION", String::class)
+                    .initializer("%S", project.version.toString())
+                    .addModifiers(KModifier.CONST)
+                    .build()
+            )
+            .addProperty(
+                PropertySpec.builder("GITHUB_URL", String::class)
+                    .initializer("%S", project.findProperty("github") ?: "")
+                    .addModifiers(KModifier.CONST)
+                    .build()
+            )
+            .build()
+
+        val file = FileSpec.builder(packageName, "BuildConfig")
+            .addType(buildConfig)
+            .build()
+
+        file.writeTo(outputDirectory.get().asFile)
+    }
 }
 
 kotlin {
@@ -49,19 +92,23 @@ kotlin {
             implementation(libs.androidx.datastore)
             implementation(libs.androidx.datastore.preferences)
         }
-        commonMain.dependencies {
-            implementation(compose.runtime)
-            implementation(compose.foundation)
-            implementation(compose.material3)
-            implementation(compose.ui)
-            implementation(compose.components.resources)
-            implementation(compose.components.uiToolingPreview)
-            implementation(compose.materialIconsExtended)
-            implementation(libs.androidx.lifecycle.viewmodel)
-            implementation(libs.androidx.lifecycle.runtime.compose)
-            implementation(libs.koin.core)
-            implementation(libs.koin.compose)
-            implementation(libs.koin.compose.viewmodel)
+        commonMain {
+            kotlin.srcDir(buildConfigSourceDirectory())
+
+            dependencies {
+                implementation(compose.runtime)
+                implementation(compose.foundation)
+                implementation(compose.material3)
+                implementation(compose.ui)
+                implementation(compose.components.resources)
+                implementation(compose.components.uiToolingPreview)
+                implementation(compose.materialIconsExtended)
+                implementation(libs.androidx.lifecycle.viewmodel)
+                implementation(libs.androidx.lifecycle.runtime.compose)
+                implementation(libs.koin.core)
+                implementation(libs.koin.compose)
+                implementation(libs.koin.compose.viewmodel)
+            }
         }
         desktopMain.dependencies {
             implementation(compose.desktop.currentOs)
@@ -84,8 +131,7 @@ android {
         applicationId = "com.github.haloperidozz.obfuscator"
         minSdk = libs.versions.android.minSdk.get().toInt()
         targetSdk = libs.versions.android.targetSdk.get().toInt()
-        versionCode = 1
-        versionName = "1.0"
+        versionName = "${project.version}"
     }
     packaging {
         resources {
@@ -115,7 +161,9 @@ compose.desktop {
             targetFormats(TargetFormat.Msi, TargetFormat.Deb)
 
             packageName = "kvas-obfusactor"
-            packageVersion = "1.0.0"
+            packageVersion = project.version.toString().run {
+                if (count { it == '.' } == 1) "$this.0" else this
+            }
 
             linux {
                 iconFile = project.file("desktop/app-icon.png")
@@ -129,4 +177,9 @@ compose.desktop {
             }
         }
     }
+}
+
+// HACK: A reliable way to generate BuildConfig ;D
+tasks.generateResourceAccessorsForCommonMain {
+    dependsOn(generateBuildConfig)
 }
