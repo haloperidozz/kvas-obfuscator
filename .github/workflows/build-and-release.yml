@@ -32,11 +32,17 @@ jobs:
 
       # Locate the produced .deb file and copy it to a fixed name so it can be used later
       - name: Find and copy .deb file
+        env:
+          TAG: ${GITHUB_REF#refs/tags/}
         run: |
-          # Look for the first .deb file in the expected folder
+          echo "Extracting tag from GITHUB_REF: $TAG"
           DEB_FILE=$(ls compose-app/build/compose/binaries/main-release/deb/*.deb | head -n 1)
+          if [ -z "$DEB_FILE" ]; then
+            echo "No .deb file found" >&2
+            exit 1
+          fi
           echo "Found .deb file: $DEB_FILE"
-          cp "$DEB_FILE" compose.deb
+          cp "$DEB_FILE" "kvas-obfuscator-${TAG}.deb"
 
       # Replace the files in the "web" branch with the production executable files
       - name: Update web branch with production executable files
@@ -65,7 +71,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: deb
-          path: compose.deb
+          path: kvas-obfuscator-${{ github.ref_name }}.deb
 
   build-windows:
     runs-on: windows-latest
@@ -90,20 +96,22 @@ jobs:
       - name: Find and copy .msi file
         shell: pwsh
         run: |
+          $tag = $env:GITHUB_REF -replace 'refs/tags/', ''
+          Write-Host "Extracted tag: $tag"
           $msiFile = Get-ChildItem -Path "compose-app\build\compose\binaries\main-release\msi\*.msi" | Select-Object -First 1
           if (-not $msiFile) {
               Write-Error "No MSI file found"
               exit 1
           }
           Write-Host "Found MSI file: $($msiFile.FullName)"
-          Copy-Item $msiFile.FullName -Destination "msi.msi"
+          Copy-Item $msiFile.FullName -Destination "kvas-obfuscator-$tag.msi"
 
       # Upload the .msi file as an artifact for later use in the release
       - name: Upload MSI artifact
         uses: actions/upload-artifact@v4
         with:
           name: msi
-          path: msi.msi
+          path: kvas-obfuscator-${{ github.ref_name }}.msi
 
   create-release:
     name: Create GitHub Release with Artifacts
@@ -130,5 +138,5 @@ jobs:
           tag: ${{ github.ref_name }}
           name: Release ${{ github.ref_name }}
           files: |
-            artifacts/compose.deb
-            artifacts/msi.msi
+            artifacts/kvas-obfuscator-${{ github.ref_name }}.deb
+            artifacts/kvas-obfuscator-${{ github.ref_name }}.msi
