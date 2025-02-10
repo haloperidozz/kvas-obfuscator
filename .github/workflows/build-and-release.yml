@@ -32,25 +32,18 @@ jobs:
 
       # Locate the produced .deb file and copy it to a fixed name so it can be used later
       - name: Find and copy .deb file
-        env:
-          TAG: ${GITHUB_REF#refs/tags/}
         run: |
-          echo "Extracting tag from GITHUB_REF: $TAG"
           DEB_FILE=$(ls compose-app/build/compose/binaries/main-release/deb/*.deb | head -n 1)
           if [ -z "$DEB_FILE" ]; then
             echo "No .deb file found" >&2
             exit 1
           fi
           echo "Found .deb file: $DEB_FILE"
-          cp "$DEB_FILE" "kvas-obfuscator-${TAG}.deb"
+          cp "$DEB_FILE" "kvas-obfuscator-${{ github.ref_name }}.deb"
 
       # Replace the files in the "web" branch with the production executable files
       - name: Update web branch with production executable files
-        env:
-          # Extract the tag name from GITHUB_REF (e.g. refs/tags/v1.2.3 → v1.2.3)
-          TAG_NAME: ${GITHUB_REF#refs/tags/}
         run: |
-          echo "Updating web branch with tag: $TAG_NAME"
           # Configure Git (so that commits made by the action have an author)
           git config --global user.name "GitHub Actions"
           git config --global user.email "actions@github.com"
@@ -62,7 +55,7 @@ jobs:
           rsync -a --delete compose-app/build/dist/wasmJs/productionExecutable/ .
           git add -A
           # Commit with the tag name. If there are no changes, don’t fail.
-          git commit -m "$TAG_NAME" || echo "No changes to commit"
+          git commit -m "${{ github.ref_name }}" || echo "No changes to commit"
           # Push the changes to the web branch (force push to replace its content)
           git push origin web --force
 
@@ -96,15 +89,13 @@ jobs:
       - name: Find and copy .msi file
         shell: pwsh
         run: |
-          $tag = $env:GITHUB_REF -replace 'refs/tags/', ''
-          Write-Host "Extracted tag: $tag"
           $msiFile = Get-ChildItem -Path "compose-app\build\compose\binaries\main-release\msi\*.msi" | Select-Object -First 1
           if (-not $msiFile) {
               Write-Error "No MSI file found"
               exit 1
           }
           Write-Host "Found MSI file: $($msiFile.FullName)"
-          Copy-Item $msiFile.FullName -Destination "kvas-obfuscator-$tag.msi"
+          Copy-Item $msiFile.FullName -Destination "kvas-obfuscator-${{ github.ref_name }}.msi"
 
       # Upload the .msi file as an artifact for later use in the release
       - name: Upload MSI artifact
