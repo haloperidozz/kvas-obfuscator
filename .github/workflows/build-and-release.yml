@@ -106,5 +106,5 @@ jobs:
         uses: ncipollo/release-action@v1
         with:
           tag: ${{ github.ref_name }}
-          name: Release ${{ github.ref_name }}'
+          name: Release ${{ github.ref_name }}
           artifacts: "artifacts/*.*"
