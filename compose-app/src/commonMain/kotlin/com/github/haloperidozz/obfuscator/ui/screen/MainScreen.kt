@@ -83,8 +83,9 @@ fun MainScreen(
             )
 
             BottomContent(
-                switchScreen = switchScreen,
-                currentGenerator = uiState.currentGenerator
+                currentGenerator = uiState.currentGenerator,
+                onInfoButtonClicked = { switchScreen(Screen.Info) },
+                onSelectButtonClicked = { switchScreen(Screen.Select) }
             )
         }
     }
@@ -204,7 +205,7 @@ private fun ResultTextField(
 }
 
 @Composable
-fun TextGeneratorValueEditor(
+private fun TextGeneratorValueEditor(
     currentGenerator: TextGenerators,
     updateGeneratorValue: (value: TextGeneratorValue) -> Unit,
     currentGeneratorValue: TextGeneratorValue?,
@@ -296,8 +297,9 @@ private fun SelectValueComposable(
 
 @Composable
 private fun BottomContent(
-    switchScreen: (Screen) -> Unit,
     currentGenerator: TextGenerators,
+    onInfoButtonClicked: () -> Unit,
+    onSelectButtonClicked: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Row(
@@ -305,7 +307,7 @@ private fun BottomContent(
         horizontalArrangement = Arrangement.spacedBy(12.dp)
     ) {
         Button(
-            onClick = { switchScreen(Screen.Select) },
+            onClick = onSelectButtonClicked,
             modifier = Modifier
                 .weight(1.0f)
                 .fillMaxSize(),
@@ -324,7 +326,7 @@ private fun BottomContent(
         }
 
         Button(
-            onClick = { switchScreen(Screen.Info) },
+            onClick = onInfoButtonClicked,
             modifier = Modifier
                 .fillMaxHeight()
                 .aspectRatio(1.0f),

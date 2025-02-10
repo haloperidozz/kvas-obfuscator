@@ -40,6 +40,7 @@ import kvas_obfuscator.compose_app.generated.resources.select
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SelectScreen(
     switchScreen: (Screen) -> Unit,
@@ -58,8 +59,18 @@ fun SelectScreen(
 
     Scaffold(
         topBar = {
-            SelectScreenTopBar(
-                onBackClicked = { switchScreen(Screen.Main) }
+            TopAppBar(
+                title = { Text(text = stringResource(Res.string.select)) },
+                navigationIcon = {
+                    IconButton(
+                        onClick = { switchScreen(Screen.Main) }
+                    ) {
+                        Icon(
+                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                            contentDescription = "Back"
+                        )
+                    }
+                }
             )
         }
     ) { paddingValues ->
@@ -75,22 +86,6 @@ fun SelectScreen(
             modifier = Modifier.padding(paddingValues)
         )
     }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun SelectScreenTopBar(onBackClicked: () -> Unit) {
-    TopAppBar(
-        title = { Text(text = stringResource(Res.string.select)) },
-        navigationIcon = {
-            IconButton(onClick = onBackClicked) {
-                Icon(
-                    imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                    contentDescription = "Back"
-                )
-            }
-        }
-    )
 }
 
 @Composable
