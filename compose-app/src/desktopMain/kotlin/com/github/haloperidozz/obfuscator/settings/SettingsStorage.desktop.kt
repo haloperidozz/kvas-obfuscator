@@ -14,9 +14,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package com.github.haloperidozz.obfuscator.data.settings
+package com.github.haloperidozz.obfuscator.settings
 
-import android.content.Context
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.PreferenceDataStoreFactory
 import androidx.datastore.preferences.core.Preferences
@@ -26,10 +25,16 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import okio.Path.Companion.toPath
 
-actual class SettingsStorage(context: Context) {
+actual class SettingsStorage {
+    private val appDataPath: String = when {
+        System.getenv("APPDATA") != null -> System.getenv("APPDATA")
+        System.getenv("XDG_CONFIG_HOME") != null -> System.getenv("XDG_CONFIG_HOME")
+        else -> "${System.getProperty("user.home")}/.config"
+    }
+
     private val dataStore: DataStore<Preferences> = PreferenceDataStoreFactory.createWithPath(
         produceFile = {
-            context.filesDir.resolve(DATASTORE_FILENAME).absolutePath.toPath()
+            ("$appDataPath/$FOLDER_NAME/$DATASTORE_FILENAME").toPath()
         }
     )
 
@@ -47,5 +52,6 @@ actual class SettingsStorage(context: Context) {
 
     companion object {
         private const val DATASTORE_FILENAME = "kvas_obfuscator.preferences_pb"
+        private const val FOLDER_NAME = "KvasObfuscator"
     }
 }

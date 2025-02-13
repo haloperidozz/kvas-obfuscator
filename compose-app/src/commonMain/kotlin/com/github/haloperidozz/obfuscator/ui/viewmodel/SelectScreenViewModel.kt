@@ -18,7 +18,7 @@ package com.github.haloperidozz.obfuscator.ui.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.github.haloperidozz.obfuscator.data.settings.SettingsStorage
+import com.github.haloperidozz.obfuscator.settings.SettingsStorage
 import com.github.haloperidozz.obfuscator.generator.TextGenerators
 import com.github.haloperidozz.obfuscator.repository.TextGeneratorRepository
 import com.github.haloperidozz.obfuscator.ui.model.SelectScreenUiState

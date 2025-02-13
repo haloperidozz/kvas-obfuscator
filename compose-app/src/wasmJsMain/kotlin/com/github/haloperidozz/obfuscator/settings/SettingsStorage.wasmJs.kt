@@ -14,14 +14,22 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package com.github.haloperidozz.obfuscator.data.settings
+package com.github.haloperidozz.obfuscator.settings
 
+import kotlinx.browser.window
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flowOf
 
-expect class SettingsStorage {
-    fun getItem(key: String): Flow<String?>
+actual class SettingsStorage {
+    actual fun getItem(key: String): Flow<String?> {
+        return flowOf(window.localStorage.getItem(key))
+    }
 
-    suspend fun setItem(key: String, value: String)
+    actual suspend fun setItem(key: String, value: String) {
+        window.localStorage.setItem(key, value)
+    }
 
-    suspend fun removeItem(key: String)
+    actual suspend fun removeItem(key: String) {
+        window.localStorage.removeItem(key)
+    }
 }
