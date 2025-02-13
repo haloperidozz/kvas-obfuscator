@@ -20,7 +20,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.github.haloperidozz.obfuscator.settings.SettingsStorage
 import com.github.haloperidozz.obfuscator.generator.TextGenerators
-import com.github.haloperidozz.obfuscator.repository.TextGeneratorRepository
 import com.github.haloperidozz.obfuscator.ui.model.SelectScreenUiState
 import com.github.haloperidozz.obfuscator.ui.viewmodel.shared.SharedTextGeneratorHolder
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -30,7 +29,6 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class SelectScreenViewModel(
-    private val textGeneratorRepository: TextGeneratorRepository,
     private val settingsStorage: SettingsStorage,
     private val sharedTextGeneratorHolder: SharedTextGeneratorHolder
 ) : ViewModel() {
@@ -38,7 +36,7 @@ class SelectScreenViewModel(
         val sharedUiState = sharedTextGeneratorHolder.uiState.value
 
         SelectScreenUiState(
-            generators = textGeneratorRepository.all(),
+            generators = TextGenerators.entries,
             favoriteGenerators = emptyList(),
             currentGenerator = sharedUiState.currentGenerator,
         )

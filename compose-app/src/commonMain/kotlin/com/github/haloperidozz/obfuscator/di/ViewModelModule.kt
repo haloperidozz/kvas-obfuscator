@@ -23,8 +23,8 @@ import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
 
 val viewModelModule = module {
-    single<SharedTextGeneratorHolder> { SharedTextGeneratorHolder(get()) }
+    single<SharedTextGeneratorHolder> { SharedTextGeneratorHolder() }
 
     viewModel<MainScreenViewModel> { MainScreenViewModel(get()) }
-    viewModel<SelectScreenViewModel> { SelectScreenViewModel(get(), get(), get()) }
+    viewModel<SelectScreenViewModel> { SelectScreenViewModel(get(), get()) }
 }

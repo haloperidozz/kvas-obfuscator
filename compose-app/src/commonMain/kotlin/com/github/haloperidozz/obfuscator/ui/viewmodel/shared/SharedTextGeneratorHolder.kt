@@ -18,18 +18,15 @@ package com.github.haloperidozz.obfuscator.ui.viewmodel.shared
 
 import com.github.haloperidozz.obfuscator.generator.TextGenerators
 import com.github.haloperidozz.obfuscator.generator.model.TextGeneratorValue
-import com.github.haloperidozz.obfuscator.repository.TextGeneratorRepository
 import com.github.haloperidozz.obfuscator.ui.model.SharedTextGeneratorUiState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 
-class SharedTextGeneratorHolder(
-    private val textGeneratorRepository: TextGeneratorRepository
-) {
+class SharedTextGeneratorHolder {
     private val initialState: SharedTextGeneratorUiState by lazy {
-        val firstGenerator = textGeneratorRepository.all().first()
+        val firstGenerator = TextGenerators.entries.first()
 
         SharedTextGeneratorUiState(
             currentGenerator = firstGenerator,
