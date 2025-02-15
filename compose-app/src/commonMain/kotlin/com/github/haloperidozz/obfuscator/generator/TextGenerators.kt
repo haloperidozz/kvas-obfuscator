@@ -23,12 +23,9 @@ import com.github.haloperidozz.obfuscator.generator.type.FloatTextGenerator
 import com.github.haloperidozz.obfuscator.generator.type.SelectTextGenerator
 import com.github.haloperidozz.obfuscator.generator.type.SimpleTextGenerator
 import com.github.haloperidozz.obfuscator.generator.type.StringTextGenerator
+import com.github.haloperidozz.obfuscator.util.Blowfish
 import com.github.haloperidozz.obfuscator.util.ISO9
 import kvas_obfuscator.compose_app.generated.resources.*
-import kvas_obfuscator.compose_app.generated.resources.Res
-import kvas_obfuscator.compose_app.generated.resources.text_generator_atbash
-import kvas_obfuscator.compose_app.generated.resources.text_generator_caesar
-import kvas_obfuscator.compose_app.generated.resources.text_generator_kvas
 import org.jetbrains.compose.resources.StringResource
 import kotlin.io.encoding.ExperimentalEncodingApi
 
@@ -158,6 +155,21 @@ enum class TextGenerators(
                 .map { "'\\x${it.toUByte().toString(16).padStart(2, '0')}'" }
                 .plus("'\\0'")
                 .joinToString(", ", "{", "}")
+        }
+    ),
+    @OptIn(ExperimentalStdlibApi::class)
+    BlowfishEncrypt(
+        category = TextGeneratorCategory.Cipher,
+        resource = Res.string.text_generator_blowfish,
+        instance = object : StringTextGenerator {
+            override fun generate(input: String, value: String): String {
+                if (input.isBlank() || value.isBlank()) return ""
+
+                val key = value.encodeToByteArray()
+                val data = input.encodeToByteArray()
+
+                return Blowfish(key).encryptData(data).toHexString()
+            }
         }
     ),
     Wingdings(

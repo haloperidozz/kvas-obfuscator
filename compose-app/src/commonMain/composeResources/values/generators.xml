@@ -29,4 +29,5 @@
     <string name="text_generator_base64">Base64</string>
     <string name="text_generator_hex_array">Character Array</string>
     <string name="text_generator_reversed">Reversed</string>
+    <string name="text_generator_blowfish">Blowfish</string>
 </resources>
