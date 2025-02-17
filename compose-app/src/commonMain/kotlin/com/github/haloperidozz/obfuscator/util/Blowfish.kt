@@ -18,120 +18,119 @@ package com.github.haloperidozz.obfuscator.util
 
 // Original implementation:
 // https://github.com/Rupan/blowfish/blob/master/blowfish.c
-class Blowfish(private val P: IntArray, private val S: Array<IntArray>) {
+class Blowfish(private val p: IntArray, private val s: Array<IntArray>) {
     constructor(key: ByteArray) : this(
         P_ORIG.copyOf(),
-        Array<IntArray>(4) { S_ORIG[it].copyOf() }
+        Array(4) { S_ORIG[it].copyOf() }
     ) {
-        var k = 0
-        for (i in P.indices) {
+        var keyIndex = 0
+        for (i in p.indices) {
             var data = 0
             repeat(4) {
-                data = (data shl 8) or (key[k].toInt() and 0xff)
-                k = (k + 1) % key.size
+                data = (data shl 8) or (key[keyIndex].toInt() and 0xff)
+                keyIndex = (keyIndex + 1) % key.size
             }
-            P[i] = P[i] xor data
+            p[i] = p[i] xor data
         }
 
-        val dataL = IntArray(1)
-        val dataR = IntArray(1)
-        for (i in P.indices step 2) {
-            encrypt(dataL, dataR)
-            P[i] = dataL[0]
-            P[i + 1] = dataR[0]
+        var block = Block(0, 0)
+        for (i in p.indices step 2) {
+            block = encryptBlock(block)
+            p[i] = block.left
+            p[i + 1] = block.right
         }
 
-        for (i in 0 until 4) {
-            for (j in 0 until 256 step 2) {
-                encrypt(dataL, dataR)
-                S[i][j] = dataL[0]
-                S[i][j + 1] = dataR[0]
+        for (i in s.indices) {
+            for (j in s[i].indices step 2) {
+                block = encryptBlock(block)
+                s[i][j] = block.left
+                s[i][j + 1] = block.right
             }
         }
     }
 
-    // HACK: Using arrays as pointers :D
-    fun encrypt(xl: IntArray, xr: IntArray) {
-        require(xl.size == 1 && xr.size == 1) {
-            "xl.size and xr.size cannot be less or greater than 1"
-        }
+    constructor(key: String) : this(key.encodeToByteArray())
 
-        var Xl = xl[0]
-        var Xr = xr[0]
+    fun encryptBlock(block: Block): Block {
+        var left = block.left
+        var right = block.right
 
         for (i in 0 until N) {
-            Xl = Xl xor P[i]
-            Xr = F(Xl) xor Xr
+            left = left xor p[i]
+            right = f(left) xor right
 
-            val temp = Xl
-            Xl = Xr
-            Xr = temp
+            left = right.also { right = left } // swap
         }
 
-        val temp = Xl
-        Xl = Xr
-        Xr = temp
-
-        Xr = Xr xor P[N]
-        Xl = Xl xor P[N + 1]
-
-        xl[0] = Xl
-        xr[0] = Xr
+        return Block(right xor p[N + 1], left xor p[N])
     }
 
     fun encryptData(data: ByteArray): ByteArray {
-        val blockSize = 8
-        val padLength = blockSize - (data.size % blockSize)
-
+        val padLength = Block.SIZE - (data.size % Block.SIZE)
         val padded = data + ByteArray(padLength) { padLength.toByte() }
         val output = ByteArray(padded.size)
 
-        val dataL = intArrayOf(0)
-        val dataR = intArrayOf(0)
+        for (i in padded.indices step Block.SIZE) {
+            val block = Block.fromByteArray(padded, i)
+            val encryptedBlock = encryptBlock(block)
 
-        for (i in padded.indices step blockSize) {
-            dataL[0] = padded.toInt(i)
-            dataR[0] = padded.toInt(i + 4)
-
-            encrypt(dataL, dataR)
-
-            dataL[0].copyBytesTo(output, i)
-            dataR[0].copyBytesTo(output, i + 4)
+            encryptedBlock.toByteArray().copyInto(output, i)
         }
 
         return output
     }
 
-    private fun F(x: Int): Int {
+    @OptIn(ExperimentalStdlibApi::class)
+    fun encryptString(string: String): String {
+        return encryptData(string.encodeToByteArray()).toHexString()
+    }
+
+    private fun f(x: Int): Int {
         val a = (x ushr 24) and 0xff
         val b = (x ushr 16) and 0xff
-        val c = (x ushr 8) and 0xff
-        val d = x and 0xff
+        val c = (x ushr 8 ) and 0xff
+        val d = (x ushr 0 ) and 0xff
 
-        return (((S[0][a] + S[1][b]) xor S[2][c]) + S[3][d])
+        return (((s[0][a] + s[1][b]) xor s[2][c]) + s[3][d])
     }
 
-    private fun ByteArray.toInt(offset: Int): Int {
-        return ((this[offset].toInt() and 0xff) shl 24) or
-                ((this[offset + 1].toInt() and 0xff) shl 16) or
-                ((this[offset + 2].toInt() and 0xff) shl 8) or
-                (this[offset + 3].toInt() and 0xff)
-    }
+    data class Block(val left: Int, val right: Int) {
+        fun toByteArray(): ByteArray = ByteArray(8).apply {
+            left.copyBytesTo(this, 0)
+            right.copyBytesTo(this, 4)
+        }
 
-    private fun Int.copyBytesTo(b: ByteArray, offset: Int) {
-        b[offset] = (this ushr 24).toByte()
-        b[offset + 1] = (this ushr 16).toByte()
-        b[offset + 2] = (this ushr 8).toByte()
-        b[offset + 3] = this.toByte()
+        companion object {
+            const val SIZE = 8
+
+            fun fromByteArray(array: ByteArray, offset: Int): Block {
+                return Block(array.toInt(offset), array.toInt(offset + 4))
+            }
+
+            private fun ByteArray.toInt(offset: Int): Int {
+                return ((this[offset + 0].toInt() and 0xff) shl 24) or
+                       ((this[offset + 1].toInt() and 0xff) shl 16) or
+                       ((this[offset + 2].toInt() and 0xff) shl 8) or
+                       ((this[offset + 3].toInt() and 0xff) shl 0)
+            }
+
+            private fun Int.copyBytesTo(destination: ByteArray, offset: Int) {
+                destination[offset + 0] = (this ushr 24).toByte()
+                destination[offset + 1] = (this ushr 16).toByte()
+                destination[offset + 2] = (this ushr 8).toByte()
+                destination[offset + 3] = this.toByte()
+            }
+        }
     }
 
     companion object {
         private const val N = 16
 
         private val P_ORIG = longArrayOf(
-            0x243f6a88, 0x85a308d3, 0x13198a2e, 0x03707344, 0xa4093822, 0x299f31d0,
-            0x082efa98, 0xec4e6c89, 0x452821e6, 0x38d01377, 0xbe5466cf, 0x34e90c6c,
-            0xc0ac29b7, 0xc97c50dd, 0x3f84d5b5, 0xb5470917, 0x9216d5d9, 0x8979fb1b
+            0x243f6a88, 0x85a308d3, 0x13198a2e, 0x03707344, 0xa4093822,
+            0x299f31d0, 0x082efa98, 0xec4e6c89, 0x452821e6, 0x38d01377,
+            0xbe5466cf, 0x34e90c6c, 0xc0ac29b7, 0xc97c50dd, 0x3f84d5b5,
+            0xb5470917, 0x9216d5d9, 0x8979fb1b
         ).map(Long::toInt).toIntArray()
 
         private val S_ORIG = arrayOf(

@@ -27,6 +27,7 @@ import com.github.haloperidozz.obfuscator.util.Blowfish
 import com.github.haloperidozz.obfuscator.util.ISO9
 import kvas_obfuscator.compose_app.generated.resources.*
 import org.jetbrains.compose.resources.StringResource
+import kotlin.io.encoding.Base64
 import kotlin.io.encoding.ExperimentalEncodingApi
 
 enum class TextGenerators(
@@ -125,12 +126,12 @@ enum class TextGenerators(
         }
     ),
     @OptIn(ExperimentalEncodingApi::class)
-    Base64(
+    Base64Encode(
         category = TextGeneratorCategory.Converter,
         resource = Res.string.text_generator_base64,
         instance = object : SimpleTextGenerator() {
             override fun generate(input: String): String {
-                return kotlin.io.encoding.Base64.encode(input.encodeToByteArray())
+                return Base64.encode(input.encodeToByteArray())
             }
         }
     ),
@@ -157,7 +158,6 @@ enum class TextGenerators(
                 .joinToString(", ", "{", "}")
         }
     ),
-    @OptIn(ExperimentalStdlibApi::class)
     BlowfishEncrypt(
         category = TextGeneratorCategory.Cipher,
         resource = Res.string.text_generator_blowfish,
@@ -165,10 +165,7 @@ enum class TextGenerators(
             override fun generate(input: String, value: String): String {
                 if (input.isBlank() || value.isBlank()) return ""
 
-                val key = value.encodeToByteArray()
-                val data = input.encodeToByteArray()
-
-                return Blowfish(key).encryptData(data).toHexString()
+                return Blowfish(key = value).encryptString(input)
             }
         }
     ),
