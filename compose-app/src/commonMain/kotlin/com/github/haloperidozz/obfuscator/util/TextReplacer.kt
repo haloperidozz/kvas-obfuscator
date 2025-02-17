@@ -16,47 +16,37 @@
  */
 package com.github.haloperidozz.obfuscator.util
 
-// TODO: Perhaps this class needs to be improved and optimized?
 class TextReplacer(
     replacements: Map<String, String>,
     private val caseSensitive: Boolean = true,
     private val delimiter: String = ""
 ) {
-    private val replacementMap: Map<String, String> = if (caseSensitive) {
-        replacements
-    } else {
-        replacements.mapKeys { it.key.lowercase() }
-    }
+    private val root = TrieNode()
 
-    private val sortedReplacements: List<Pair<String, String>> = replacementMap
-        .entries
-        .map { it.toPair() }
-        .sortedByDescending { it.first.length }
+    init {
+        for ((pattern, replacement) in replacements) {
+            var node = root
+            val key = if (caseSensitive) pattern else pattern.lowercase()
+
+            for (char in key) {
+                node = node.children.getOrPut(char) { TrieNode() }
+            }
+
+            node.isEndOfPattern = true
+            node.replacement = replacement
+        }
+    }
 
     fun replace(input: String): String = buildString {
         var index = 0
 
         while (index < input.length) {
-            val rule = sortedReplacements.firstOrNull { (pattern, _) ->
-                if (caseSensitive) {
-                    input.startsWith(pattern, index)
-                } else {
-                    input.regionMatches(
-                        ignoreCase = true,
-                        thisOffset = index,
-                        other = pattern,
-                        otherOffset = 0,
-                        length = pattern.length
-                    )
-                }
-            }
+            val (matchLength, replacement) = findLongestMatch(input, index)
 
-            if (rule != null) {
-                val (pattern, replacement) = rule
-
+            if (matchLength > 0) {
                 if (isNotEmpty()) append(delimiter)
                 append(replacement)
-                index += pattern.length
+                index += matchLength
             } else {
                 append(input[index])
                 index++
@@ -64,5 +54,41 @@ class TextReplacer(
         }
     }
 
+    private fun findLongestMatch(input: String, index: Int): Pair<Int, String> {
+        var node = root
+        var longestMatchLength = 0
+        var replacement: String? = null
+        var currentIndex = index
+
+        while (currentIndex < input.length) {
+            val char = if (caseSensitive) {
+                input[currentIndex]
+            } else {
+                input[currentIndex].lowercaseChar()
+            }
+
+            node = node.children[char] ?: break
+
+            if (node.isEndOfPattern) {
+                longestMatchLength = currentIndex - index + 1
+                replacement = node.replacement
+            }
+
+            currentIndex++
+        }
+
+        return if (longestMatchLength > 0 && replacement != null) {
+            longestMatchLength to replacement
+        } else {
+            0 to ""
+        }
+    }
+
     operator fun invoke(input: String): String = replace(input)
+
+    private data class TrieNode(
+        val children: MutableMap<Char, TrieNode> = mutableMapOf(),
+        var replacement: String? = null,
+        var isEndOfPattern: Boolean = false
+    )
 }
