@@ -85,6 +85,11 @@ enum class TextGenerators(
         resource = Res.string.text_generator_pechenka,
         instance = PechenkaTextGenerator()
     ),
+    Combining(
+        category = TextGeneratorCategory.Other,
+        resource = Res.string.text_generator_combining,
+        instance = CombiningTextGenerator()
+    ),
     Assembly(
         category = TextGeneratorCategory.Programming,
         resource = Res.string.text_generator_assembly,

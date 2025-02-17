@@ -30,4 +30,5 @@
     <string name="text_generator_hex_array">Массив символов</string>
     <string name="text_generator_reversed">Перевернутый</string>
     <string name="text_generator_blowfish">Blowfish</string>
+    <string name="text_generator_combining">Диакритические знаки</string>
 </resources>
