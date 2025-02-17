@@ -71,7 +71,7 @@ class Blowfish(private val p: IntArray, private val s: Array<IntArray>) {
         val output = ByteArray(padded.size)
 
         for (i in padded.indices step Block.SIZE) {
-            val block = Block.fromByteArray(padded, i)
+            val block = Block(padded, i)
             val encryptedBlock = encryptBlock(block)
 
             encryptedBlock.toByteArray().copyInto(output, i)
@@ -95,6 +95,11 @@ class Blowfish(private val p: IntArray, private val s: Array<IntArray>) {
     }
 
     data class Block(val left: Int, val right: Int) {
+        constructor(array: ByteArray, offset: Int) : this(
+            left = array.toInt(offset),
+            right = array.toInt(offset + 4)
+        )
+
         fun toByteArray(): ByteArray = ByteArray(8).apply {
             left.copyBytesTo(this, 0)
             right.copyBytesTo(this, 4)
@@ -102,24 +107,6 @@ class Blowfish(private val p: IntArray, private val s: Array<IntArray>) {
 
         companion object {
             const val SIZE = 8
-
-            fun fromByteArray(array: ByteArray, offset: Int): Block {
-                return Block(array.toInt(offset), array.toInt(offset + 4))
-            }
-
-            private fun ByteArray.toInt(offset: Int): Int {
-                return ((this[offset + 0].toInt() and 0xff) shl 24) or
-                       ((this[offset + 1].toInt() and 0xff) shl 16) or
-                       ((this[offset + 2].toInt() and 0xff) shl 8) or
-                       ((this[offset + 3].toInt() and 0xff) shl 0)
-            }
-
-            private fun Int.copyBytesTo(destination: ByteArray, offset: Int) {
-                destination[offset + 0] = (this ushr 24).toByte()
-                destination[offset + 1] = (this ushr 16).toByte()
-                destination[offset + 2] = (this ushr 8).toByte()
-                destination[offset + 3] = this.toByte()
-            }
         }
     }
 
