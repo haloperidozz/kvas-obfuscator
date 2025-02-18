@@ -480,6 +480,23 @@ enum class TextGenerators(
                 it.isLetter() || it.isWhitespace()
             }, Unit)
         }
+    ),
+    Crow(
+        category = TextGeneratorCategory.Other,
+        resource = Res.string.text_generator_crow,
+        instance = TextReplacerTextGenerator(
+            replacements = mapOf(
+                "a" to "s", "b" to "f", "c" to "t", "d" to "z", "e" to "l",
+                "f" to "q", "g" to "u", "h" to "i", "i" to "r", "j" to "v",
+                "k" to "y", "l" to "o", "m" to "j", "n" to "c", "o" to "e",
+                "p" to "x", "q" to "m", "r" to "h", "s" to "w", "t" to "n",
+                "u" to "p", "v" to "b", "w" to "a", "x" to "d", "y" to "k",
+                "z" to "g",
+            ),
+            caseSensitive = false
+        ).modify { generator, input ->
+            generator.generate(ISO9.Simple.transliterate(input), Unit)
+        }
     );
 
     fun defaultValue(): TextGeneratorValue? {

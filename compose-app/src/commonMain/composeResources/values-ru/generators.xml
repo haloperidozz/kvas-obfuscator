@@ -31,4 +31,5 @@
     <string name="text_generator_reversed">Перевернутый</string>
     <string name="text_generator_blowfish">Blowfish</string>
     <string name="text_generator_combining">Диакритические знаки</string>
+    <string name="text_generator_crow">Вороний язык (CC64)</string>
 </resources>
