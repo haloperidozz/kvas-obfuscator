@@ -1,7 +1,3 @@
-import com.squareup.kotlinpoet.FileSpec
-import com.squareup.kotlinpoet.KModifier
-import com.squareup.kotlinpoet.PropertySpec
-import com.squareup.kotlinpoet.TypeSpec
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
@@ -14,43 +10,23 @@ plugins {
     alias(libs.plugins.composeCompiler)
 }
 
-buildscript {
-    dependencies {
-        classpath(libs.kotlinpoet)
-    }
+val generateBuildConfig = tasks.register<GenerateBuildConfigTask>("generateBuildConfig") {
+    objectName.set("BuildConfig")
+    packageName.set("com.github.haloperidozz.obfuscator.buildconfig")
+
+    properties.putAll(
+        mapOf(
+            "VERSION" to project.version.toString(),
+            "GITHUB_URL" to (project.findProperty("github")?.toString() ?: "")
+        )
+    )
+
+    outputDirectory.set(layout.buildDirectory.dir("generated/buildconfig/kotlin"))
 }
 
-fun buildConfigSourceDirectory() =
-    layout.buildDirectory.dir("generated/buildconfig/kotlin")
-
-val generateBuildConfig: TaskProvider<*> by tasks.registering {
-    val packageName = "com.github.haloperidozz.obfuscator.buildconfig"
-    val outputDirectory = buildConfigSourceDirectory()
-
-    outputs.dir(outputDirectory)
-
-    doLast {
-        val buildConfig = TypeSpec.objectBuilder("BuildConfig")
-            .addProperty(
-                PropertySpec.builder("VERSION", String::class)
-                    .initializer("%S", project.version.toString())
-                    .addModifiers(KModifier.CONST)
-                    .build()
-            )
-            .addProperty(
-                PropertySpec.builder("GITHUB_URL", String::class)
-                    .initializer("%S", project.findProperty("github") ?: "")
-                    .addModifiers(KModifier.CONST)
-                    .build()
-            )
-            .build()
-
-        val file = FileSpec.builder(packageName, "BuildConfig")
-            .addType(buildConfig)
-            .build()
-
-        file.writeTo(outputDirectory.get().asFile)
-    }
+// HACK: A reliable way to generate BuildConfig ;D
+tasks.generateResourceAccessorsForCommonMain {
+    dependsOn(generateBuildConfig)
 }
 
 kotlin {
@@ -93,7 +69,7 @@ kotlin {
             implementation(libs.androidx.datastore.preferences)
         }
         commonMain {
-            kotlin.srcDir(buildConfigSourceDirectory())
+            kotlin.srcDir(generateBuildConfig.get().outputDirectory.get())
 
             dependencies {
                 implementation(compose.runtime)
@@ -177,9 +153,4 @@ compose.desktop {
             }
         }
     }
-}
-
-// HACK: A reliable way to generate BuildConfig ;D
-tasks.generateResourceAccessorsForCommonMain {
-    dependsOn(generateBuildConfig)
 }
